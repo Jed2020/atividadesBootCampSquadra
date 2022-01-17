@@ -1,11 +1,10 @@
 {
-   "type": "pg",
+   "type": "postgres",
    "host": "localhost",
    "port": 5432,
    "username": "postgres",
    "password": "123",
-   "database": "bootCampSquadra",
-   "name": "quicktypeorm",
+   "database": "postgres",
    "synchronize": true,
    "logging": false,
    "entities": [

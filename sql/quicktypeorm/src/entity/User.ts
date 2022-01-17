@@ -7,12 +7,21 @@ export class User {
     id: number;
 
     @Column()
-    firstName: string;
+    nome: string;
 
     @Column()
-    lastName: string;
+    sobrenome: string;
 
     @Column()
-    age: number;
+    idade: number;
+
+    @Column()
+    email: string;
+
+    @Column()
+    senha: string;
+
+    @Column()
+    status: number;
 
 }
