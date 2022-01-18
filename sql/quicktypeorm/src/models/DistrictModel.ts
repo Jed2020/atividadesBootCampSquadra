@@ -12,7 +12,7 @@ export default class District {
     nome_bairro: string;
     
     @Column({
-        length: 3,
+        width: 3,
     })
     status: number;
 

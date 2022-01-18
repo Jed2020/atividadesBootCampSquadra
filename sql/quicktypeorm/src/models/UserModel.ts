@@ -17,7 +17,7 @@ export default class User {
     sobrenome: string;
 
     @Column({
-        length: 3,
+        width: 3,
     })
     idade: number;
 
@@ -32,7 +32,7 @@ export default class User {
     senha: string;
 
     @Column({
-        length: 9,
+        width: 9,
     })
     status: number;
 

@@ -17,7 +17,7 @@ export default class State {
     nome_estado: string;
     
     @Column({
-        length: 3,
+        width: 3,
     })
     status: number;
 
