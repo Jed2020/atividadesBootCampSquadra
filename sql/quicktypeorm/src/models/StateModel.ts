@@ -1,10 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-
+import { Entity, PrimaryGeneratedColumn, JoinColumn, Column, OneToMany } from "typeorm";
+import City from '../models/cityModel'
 @Entity('UF')
 
 export default class State {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    UF_id: string;
 
     @Column({
         length: 3,
@@ -20,5 +20,8 @@ export default class State {
         width: 3,
     })
     status: number;
+
+    @OneToMany(type => City, municipio => municipio.UF)
+    Municipio: City;
 
 }

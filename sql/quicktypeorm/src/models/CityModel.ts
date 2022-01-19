@@ -1,10 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import State from '../models/stateModel'
 @Entity('Municipio')
 
 export default class City {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    Municipio_id: string;
 
     @Column({
         length: 256,
@@ -16,4 +16,11 @@ export default class City {
     })
     status: number;
 
+    @Column()
+    UF_id: string;
+
+
+    @ManyToOne(type => State, uf => uf.Municipio)
+    @JoinColumn({name:"UF_id"})
+    UF : State;
 }
