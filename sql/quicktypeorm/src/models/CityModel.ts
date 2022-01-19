@@ -21,7 +21,7 @@ export default class City {
     @Column()
     UF_id: string;
 
-    @ManyToOne(type => State, uf => uf.Municipio)
+    @ManyToOne(type => State, uf => uf.Municipio, {eager: true})
     @JoinColumn({name:"UF_id"})
     UF : State;
 

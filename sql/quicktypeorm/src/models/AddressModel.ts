@@ -33,7 +33,7 @@ export default class Address {
     @Column()
     Pessoa_id: string;
 
-    @ManyToOne(type => District, bairro => bairro.Endereco)
+    @ManyToOne(type => District, bairro => bairro.Endereco, {eager: true})
     @JoinColumn({name:"Bairro_id"})
     Bairro: District;
 

@@ -21,7 +21,7 @@ export default class District {
     @Column()
     Municipio_id: string;
 
-    @ManyToOne(type => City, municipio => municipio.Bairro)
+    @ManyToOne(type => City, municipio => municipio.Bairro, {eager: true})
     @JoinColumn({name:"Municipio_id"})
     Municipio: City;
 
