@@ -1,10 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, JoinColumn, ManyToOne, OneToOne, Column, OneToMany } from "typeorm";
+import City from '../models/cityModel';
+import Address from '../models/addressModel';
 
 @Entity('Bairro')
 
 export default class District {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    Bairro_id: string;
 
     @Column({
         length: 256,
@@ -15,5 +17,15 @@ export default class District {
         width: 3,
     })
     status: number;
+
+    @Column()
+    Municipio_id: string;
+
+    @ManyToOne(type => City, municipio => municipio.Bairro)
+    @JoinColumn({name:"Municipio_id"})
+    Municipio: City;
+
+    @OneToMany(type => Address, endereco => endereco.Bairro)
+    Endereco : Address;
 
 }

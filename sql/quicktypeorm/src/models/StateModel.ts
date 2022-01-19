@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, JoinColumn, Column, OneToMany } from "typeorm";
-import City from '../models/cityModel'
+import City from '../models/cityModel';
+
 @Entity('UF')
 
 export default class State {

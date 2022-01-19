@@ -1,10 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import Address from '../models/addressModel';
 
 @Entity('Pessoa')
 
 export default class User {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    Pessoa_id: string;
 
     @Column({
         length: 256,
@@ -36,4 +37,6 @@ export default class User {
     })
     status: number;
 
+    @OneToMany(type => Address, endereco => endereco.Pessoa)
+    Endereco : Address;
 }
