@@ -10,22 +10,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
+var addressModel_1 = require("../models/addressModel");
+var class_validator_1 = require("class-validator");
 var User = /** @class */ (function () {
     function User() {
     }
     __decorate([
         typeorm_1.PrimaryGeneratedColumn('uuid'),
         __metadata("design:type", String)
-    ], User.prototype, "id", void 0);
+    ], User.prototype, "Pessoa_id", void 0);
     __decorate([
         typeorm_1.Column({
             length: 256,
+        }),
+        class_validator_1.MaxLength(256, {
+            message: 'Atingiu o Máximo.',
+        }),
+        class_validator_1.MinLength(3, {
+            message: 'É muito curto.',
         }),
         __metadata("design:type", String)
     ], User.prototype, "nome", void 0);
     __decorate([
         typeorm_1.Column({
             length: 256,
+        }),
+        class_validator_1.MaxLength(256, {
+            message: 'Atingiu o Máximo.',
+        }),
+        class_validator_1.MinLength(3, {
+            message: 'É muito curto.',
         }),
         __metadata("design:type", String)
     ], User.prototype, "sobrenome", void 0);
@@ -39,11 +53,21 @@ var User = /** @class */ (function () {
         typeorm_1.Column({
             length: 50,
         }),
+        class_validator_1.IsEmail({
+            message: 'Email inválido.',
+        }),
         __metadata("design:type", String)
     ], User.prototype, "login", void 0);
     __decorate([
         typeorm_1.Column({
             length: 50,
+        }),
+        class_validator_1.IsString(),
+        class_validator_1.MaxLength(50, {
+            message: 'Atingiu o Máximo.',
+        }),
+        class_validator_1.MinLength(3, {
+            message: 'É muito curto.',
         }),
         __metadata("design:type", String)
     ], User.prototype, "senha", void 0);
@@ -53,6 +77,10 @@ var User = /** @class */ (function () {
         }),
         __metadata("design:type", Number)
     ], User.prototype, "status", void 0);
+    __decorate([
+        typeorm_1.OneToMany(function (type) { return addressModel_1.default; }, function (endereco) { return endereco.Pessoa; }, { eager: true }),
+        __metadata("design:type", addressModel_1.default)
+    ], User.prototype, "Endereco", void 0);
     User = __decorate([
         typeorm_1.Entity('Pessoa')
     ], User);

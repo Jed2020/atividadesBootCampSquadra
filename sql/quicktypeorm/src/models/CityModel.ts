@@ -33,5 +33,5 @@ export default class City {
     UF : State;
 
     @OneToMany(type => District, bairro => bairro.Municipio)
-    Bairro : District;
+    Bairro : District[];
 }

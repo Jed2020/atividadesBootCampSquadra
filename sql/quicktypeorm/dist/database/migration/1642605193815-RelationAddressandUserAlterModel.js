@@ -1,23 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -54,36 +35,41 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var typeorm_1 = require("typeorm");
-var userModel_1 = require("../models/userModel");
-var UserRepository = /** @class */ (function (_super) {
-    __extends(UserRepository, _super);
-    function UserRepository() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var RelationAddressandUserAlterModel1642605193815 = /** @class */ (function () {
+    function RelationAddressandUserAlterModel1642605193815() {
+        this.name = 'RelationAddressandUserAlterModel1642605193815';
     }
-    UserRepository_1 = UserRepository;
-    UserRepository.prototype.findByName = function (nome) {
+    RelationAddressandUserAlterModel1642605193815.prototype.up = function (queryRunner) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                if (!UserRepository_1) {
-                    throw new Error('Usuário não encontrado.');
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, queryRunner.query("ALTER TABLE \"Endereco\" ADD \"Pessoa_id\" uuid")];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"Endereco\" ADD CONSTRAINT \"FK_25bc171150647ab21add646446a\" FOREIGN KEY (\"Pessoa_id\") REFERENCES \"Pessoa\"(\"Pessoa_id\") ON DELETE NO ACTION ON UPDATE NO ACTION")];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
                 }
-                else {
-                    return [2 /*return*/, this.find({
-                            where: {
-                                nome: nome,
-                            },
-                        })];
-                }
-                return [2 /*return*/];
             });
         });
     };
-    var UserRepository_1;
-    UserRepository = UserRepository_1 = __decorate([
-        typeorm_1.EntityRepository(userModel_1.default)
-    ], UserRepository);
-    return UserRepository;
-}(typeorm_1.Repository));
-exports.default = UserRepository;
-//# sourceMappingURL=userRepository.js.map
+    RelationAddressandUserAlterModel1642605193815.prototype.down = function (queryRunner) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, queryRunner.query("ALTER TABLE \"Endereco\" DROP CONSTRAINT \"FK_25bc171150647ab21add646446a\"")];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"Endereco\" DROP COLUMN \"Pessoa_id\"")];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return RelationAddressandUserAlterModel1642605193815;
+}());
+exports.RelationAddressandUserAlterModel1642605193815 = RelationAddressandUserAlterModel1642605193815;
+//# sourceMappingURL=1642605193815-RelationAddressandUserAlterModel.js.map

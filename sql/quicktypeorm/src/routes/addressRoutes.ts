@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { getRepository, getCustomRepository } from 'typeorm';
+import { validate } from 'class-validator';
 import addressModel from '../models/addressModel';
 import AddressRepository from '../repositories/addressRepository';
 
@@ -9,10 +10,21 @@ addressRouter.post('/', async (request, response) => {
 
     try {
         const repo = getRepository(addressModel);
-        const res = await repo.save(request.body);
-        return response.status(201).json(res);
+        const {nome_rua, numero, complemento, cep, Bairro_id, Pessoa_id} = request.body;
+
+        const address = repo.create({
+            nome_rua, numero, complemento, cep, Bairro_id, Pessoa_id
+        });
+        const errors = await validate(address);
+
+        if (errors.length === 0) {
+            const res = await repo.save(address);
+            return response.status(201).json(res);
+        }
+        return response.status(400).json(errors);
     } catch (err) {
         console.error('err.mensage :>>', err.message);
+        return response.status(400).send({msg: "Erro nos dados."});
     }
 }); 
 

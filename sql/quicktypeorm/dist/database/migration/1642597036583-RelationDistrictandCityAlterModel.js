@@ -1,23 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -54,36 +35,41 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var typeorm_1 = require("typeorm");
-var userModel_1 = require("../models/userModel");
-var UserRepository = /** @class */ (function (_super) {
-    __extends(UserRepository, _super);
-    function UserRepository() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var RelationDistrictandCityAlterModel1642597036583 = /** @class */ (function () {
+    function RelationDistrictandCityAlterModel1642597036583() {
+        this.name = 'RelationDistrictandCityAlterModel1642597036583';
     }
-    UserRepository_1 = UserRepository;
-    UserRepository.prototype.findByName = function (nome) {
+    RelationDistrictandCityAlterModel1642597036583.prototype.up = function (queryRunner) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                if (!UserRepository_1) {
-                    throw new Error('Usuário não encontrado.');
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, queryRunner.query("ALTER TABLE \"Municipio\" DROP COLUMN \"Bairro_id\"")];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"Bairro\" ADD \"Municipio_id\" character varying NOT NULL")];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
                 }
-                else {
-                    return [2 /*return*/, this.find({
-                            where: {
-                                nome: nome,
-                            },
-                        })];
-                }
-                return [2 /*return*/];
             });
         });
     };
-    var UserRepository_1;
-    UserRepository = UserRepository_1 = __decorate([
-        typeorm_1.EntityRepository(userModel_1.default)
-    ], UserRepository);
-    return UserRepository;
-}(typeorm_1.Repository));
-exports.default = UserRepository;
-//# sourceMappingURL=userRepository.js.map
+    RelationDistrictandCityAlterModel1642597036583.prototype.down = function (queryRunner) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, queryRunner.query("ALTER TABLE \"Bairro\" DROP COLUMN \"Municipio_id\"")];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, queryRunner.query("ALTER TABLE \"Municipio\" ADD \"Bairro_id\" character varying NOT NULL")];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return RelationDistrictandCityAlterModel1642597036583;
+}());
+exports.RelationDistrictandCityAlterModel1642597036583 = RelationDistrictandCityAlterModel1642597036583;
+//# sourceMappingURL=1642597036583-RelationDistrictandCityAlterModel.js.map

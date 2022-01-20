@@ -36,6 +36,6 @@ export default class State {
     status: number;
 
     @OneToMany(type => City, municipio => municipio.UF)
-    Municipio: City;
+    Municipio: City[];
 
 }

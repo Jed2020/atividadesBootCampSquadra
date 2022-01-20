@@ -38,67 +38,54 @@ var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var typeorm_1 = require("typeorm");
-var class_validator_1 = require("class-validator");
-var userModel_1 = require("../models/userModel");
-var userRepository_1 = require("../repositories/userRepository");
-var userRouter = express_1.Router();
-userRouter.post('/', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
-    var repo, _a, nome, sobrenome, idade, login, senha, status, user, errors, res, err_1;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+var stateModel_1 = require("../models/stateModel");
+var stateRepository_1 = require("../repositories/stateRepository");
+var stateRouter = express_1.Router();
+stateRouter.post('/', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+    var repo, res, err_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _b.trys.push([0, 4, , 5]);
-                repo = typeorm_1.getRepository(userModel_1.default);
-                _a = request.body, nome = _a.nome, sobrenome = _a.sobrenome, idade = _a.idade, login = _a.login, senha = _a.senha, status = _a.status;
-                user = repo.create({
-                    nome: nome, sobrenome: sobrenome, idade: idade, login: login, senha: senha, status: status
-                });
-                return [4 /*yield*/, class_validator_1.validate(user)];
+                _a.trys.push([0, 2, , 3]);
+                repo = typeorm_1.getRepository(stateModel_1.default);
+                return [4 /*yield*/, repo.save(request.body)];
             case 1:
-                errors = _b.sent();
-                if (!(errors.length === 0)) return [3 /*break*/, 3];
-                return [4 /*yield*/, repo.save(user)];
-            case 2:
-                res = _b.sent();
+                res = _a.sent();
                 return [2 /*return*/, response.status(201).json(res)];
-            case 3: return [2 /*return*/, response.status(400).json(errors)];
-            case 4:
-                err_1 = _b.sent();
+            case 2:
+                err_1 = _a.sent();
                 console.error('err.mensage :>>', err_1.message);
-                return [2 /*return*/, response.status(400).send({ msg: "Erro nos dados." })];
-            case 5: return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); });
-userRouter.get('/', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+stateRouter.get('/', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
     var _a, _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 _b = (_a = response).json;
-                return [4 /*yield*/, typeorm_1.getRepository(userModel_1.default).find()];
+                return [4 /*yield*/, typeorm_1.getRepository(stateModel_1.default).find()];
             case 1:
                 _b.apply(_a, [_c.sent()]);
                 return [2 /*return*/];
         }
     });
 }); });
-userRouter.get('/:nome', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+stateRouter.get('/:nome_bairro', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
     var repository, res;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                repository = typeorm_1.getCustomRepository(userRepository_1.default);
-                return [4 /*yield*/, repository.findByName(request.params.nome)];
+                repository = typeorm_1.getCustomRepository(stateRepository_1.default);
+                return [4 /*yield*/, repository.findByName(request.params.nome_bairro)];
             case 1:
                 res = _a.sent();
-                if (!res) {
-                    throw new Error('User not found');
-                }
                 response.json(res);
                 return [2 /*return*/];
         }
     });
 }); });
-exports.default = userRouter;
-//# sourceMappingURL=userRoutes.js.map
+exports.default = stateRouter;
+//# sourceMappingURL=stateRoutes.js.map

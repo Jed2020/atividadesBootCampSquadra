@@ -61,5 +61,5 @@ export default class User {
     status: number;
 
     @OneToMany(type => Address, endereco => endereco.Pessoa, {eager: true})
-    Endereco : Address;
+    Endereco : Address[];
 }

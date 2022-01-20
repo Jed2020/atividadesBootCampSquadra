@@ -55,35 +55,27 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
-var userModel_1 = require("../models/userModel");
-var UserRepository = /** @class */ (function (_super) {
-    __extends(UserRepository, _super);
-    function UserRepository() {
+var cityModel_1 = require("../models/cityModel");
+var StateRepository = /** @class */ (function (_super) {
+    __extends(StateRepository, _super);
+    function StateRepository() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    UserRepository_1 = UserRepository;
-    UserRepository.prototype.findByName = function (nome) {
+    StateRepository.prototype.findByName = function (nome_municipio) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                if (!UserRepository_1) {
-                    throw new Error('Usuário não encontrado.');
-                }
-                else {
-                    return [2 /*return*/, this.find({
-                            where: {
-                                nome: nome,
-                            },
-                        })];
-                }
-                return [2 /*return*/];
+                return [2 /*return*/, this.find({
+                        where: {
+                            nome_municipio: nome_municipio,
+                        },
+                    })];
             });
         });
     };
-    var UserRepository_1;
-    UserRepository = UserRepository_1 = __decorate([
-        typeorm_1.EntityRepository(userModel_1.default)
-    ], UserRepository);
-    return UserRepository;
+    StateRepository = __decorate([
+        typeorm_1.EntityRepository(cityModel_1.default)
+    ], StateRepository);
+    return StateRepository;
 }(typeorm_1.Repository));
-exports.default = UserRepository;
-//# sourceMappingURL=userRepository.js.map
+exports.default = StateRepository;
+//# sourceMappingURL=cityRepository.js.map

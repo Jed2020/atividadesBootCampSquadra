@@ -33,6 +33,6 @@ export default class District {
     Municipio: City;
 
     @OneToMany(type => Address, endereco => endereco.Bairro)
-    Endereco : Address;
+    Endereco : Address[];
 
 }

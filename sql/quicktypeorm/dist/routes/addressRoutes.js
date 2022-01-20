@@ -39,25 +39,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var typeorm_1 = require("typeorm");
 var class_validator_1 = require("class-validator");
-var userModel_1 = require("../models/userModel");
-var userRepository_1 = require("../repositories/userRepository");
-var userRouter = express_1.Router();
-userRouter.post('/', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
-    var repo, _a, nome, sobrenome, idade, login, senha, status, user, errors, res, err_1;
+var addressModel_1 = require("../models/addressModel");
+var addressRepository_1 = require("../repositories/addressRepository");
+var addressRouter = express_1.Router();
+addressRouter.post('/', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+    var repo, _a, nome_rua, numero, complemento, cep, address, errors, res, err_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 4, , 5]);
-                repo = typeorm_1.getRepository(userModel_1.default);
-                _a = request.body, nome = _a.nome, sobrenome = _a.sobrenome, idade = _a.idade, login = _a.login, senha = _a.senha, status = _a.status;
-                user = repo.create({
-                    nome: nome, sobrenome: sobrenome, idade: idade, login: login, senha: senha, status: status
+                repo = typeorm_1.getRepository(addressModel_1.default);
+                _a = request.body, nome_rua = _a.nome_rua, numero = _a.numero, complemento = _a.complemento, cep = _a.cep;
+                address = repo.create({
+                    nome_rua: nome_rua, numero: numero, complemento: complemento, cep: cep
                 });
-                return [4 /*yield*/, class_validator_1.validate(user)];
+                return [4 /*yield*/, class_validator_1.validate(address)];
             case 1:
                 errors = _b.sent();
                 if (!(errors.length === 0)) return [3 /*break*/, 3];
-                return [4 /*yield*/, repo.save(user)];
+                return [4 /*yield*/, repo.save(address)];
             case 2:
                 res = _b.sent();
                 return [2 /*return*/, response.status(201).json(res)];
@@ -70,35 +70,32 @@ userRouter.post('/', function (request, response) { return __awaiter(_this, void
         }
     });
 }); });
-userRouter.get('/', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+addressRouter.get('/', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
     var _a, _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 _b = (_a = response).json;
-                return [4 /*yield*/, typeorm_1.getRepository(userModel_1.default).find()];
+                return [4 /*yield*/, typeorm_1.getRepository(addressModel_1.default).find()];
             case 1:
                 _b.apply(_a, [_c.sent()]);
                 return [2 /*return*/];
         }
     });
 }); });
-userRouter.get('/:nome', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+addressRouter.get('/:nome_endereco', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
     var repository, res;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                repository = typeorm_1.getCustomRepository(userRepository_1.default);
-                return [4 /*yield*/, repository.findByName(request.params.nome)];
+                repository = typeorm_1.getCustomRepository(addressRepository_1.default);
+                return [4 /*yield*/, repository.findByName(request.params.nome_endereco)];
             case 1:
                 res = _a.sent();
-                if (!res) {
-                    throw new Error('User not found');
-                }
                 response.json(res);
                 return [2 /*return*/];
         }
     });
 }); });
-exports.default = userRouter;
-//# sourceMappingURL=userRoutes.js.map
+exports.default = addressRouter;
+//# sourceMappingURL=addressRoutes.js.map

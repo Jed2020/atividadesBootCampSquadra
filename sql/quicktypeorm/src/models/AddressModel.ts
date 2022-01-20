@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, ManyToOne, ManyToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from "typeorm";
 import District from '../models/districtModel';
 import User from '../models/userModel';
 import { MaxLength, MinLength } from 'class-validator';

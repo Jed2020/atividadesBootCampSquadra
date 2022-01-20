@@ -11,24 +11,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
 var cityModel_1 = require("../models/cityModel");
+var class_validator_1 = require("class-validator");
 var State = /** @class */ (function () {
     function State() {
     }
-    State_1 = State;
-    var State_1;
     __decorate([
         typeorm_1.PrimaryGeneratedColumn('uuid'),
         __metadata("design:type", String)
-    ], State.prototype, "id", void 0);
+    ], State.prototype, "UF_id", void 0);
     __decorate([
         typeorm_1.Column({
             length: 3,
+        }),
+        class_validator_1.MaxLength(3, {
+            message: 'Atingiu o Máximo.',
+        }),
+        class_validator_1.MinLength(2, {
+            message: 'É muito curto.',
         }),
         __metadata("design:type", String)
     ], State.prototype, "sigla", void 0);
     __decorate([
         typeorm_1.Column({
             length: 256,
+        }),
+        class_validator_1.MaxLength(256, {
+            message: 'Atingiu o Máximo.',
+        }),
+        class_validator_1.MinLength(3, {
+            message: 'É muito curto.',
         }),
         __metadata("design:type", String)
     ], State.prototype, "nome_estado", void 0);
@@ -39,11 +50,10 @@ var State = /** @class */ (function () {
         __metadata("design:type", Number)
     ], State.prototype, "status", void 0);
     __decorate([
-        typeorm_1.OneToOne(function (type) { return cityModel_1.default; }, function (UF) { return State_1; }),
-        typeorm_1.JoinColumn(),
+        typeorm_1.OneToMany(function (type) { return cityModel_1.default; }, function (municipio) { return municipio.UF; }),
         __metadata("design:type", cityModel_1.default)
     ], State.prototype, "Municipio", void 0);
-    State = State_1 = __decorate([
+    State = __decorate([
         typeorm_1.Entity('UF')
     ], State);
     return State;
