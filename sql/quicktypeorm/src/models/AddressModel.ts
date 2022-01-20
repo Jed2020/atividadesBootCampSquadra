@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, ManyToOne, ManyToMany } from "typeorm";
 import District from '../models/districtModel';
 import User from '../models/userModel';
+import { MaxLength, MinLength } from 'class-validator';
 @Entity('Endereco')
 
 export default class Address {
@@ -10,20 +11,43 @@ export default class Address {
     @Column({
         length: 256,
     })
+    @MaxLength(256, {
+        message: 'Atingiu o Máximo.',
+    })
+    @MinLength(3, {
+        message: 'É muito curto.',
+    })
     nome_rua: string;
 
     @Column({
         length: 10,
+    })
+    @MaxLength(10, {
+        message: 'Atingiu o Máximo.',
+    })
+    @MinLength(0, {
+        message: 'É muito curto.',
     })
     numero: string;
 
     @Column({
         length: 20,
     })
+    @MaxLength(20, {
+        message: 'Atingiu o Máximo.',
+    })
+    @MinLength(0, {
+        message: 'É muito curto.',
+    })
     complemento: string;
 
     @Column({
         length: 10,
+    })@MaxLength(10, {
+        message: 'Atingiu o Máximo.',
+    })
+    @MinLength(0, {
+        message: 'É muito curto.',
     })
     cep: string;
 

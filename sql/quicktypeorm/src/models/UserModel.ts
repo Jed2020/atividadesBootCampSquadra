@@ -13,10 +13,10 @@ export default class User {
     })
     @MaxLength(256, {
         message: 'Atingiu o Máximo.',
-      })
+    })
     @MinLength(3, {
         message: 'É muito curto.',
-      })
+    })
     nome: string;
 
     @Column({
@@ -24,10 +24,10 @@ export default class User {
     })
     @MaxLength(256, {
         message: 'Atingiu o Máximo.',
-      })
+    })
     @MinLength(3, {
         message: 'É muito curto.',
-      })
+    })
     sobrenome: string;
 
     @Column({
@@ -40,7 +40,7 @@ export default class User {
     })
     @IsEmail({
         message: 'Email inválido.',
-      })
+    })
     login: string;
 
     @Column({
@@ -49,10 +49,10 @@ export default class User {
     @IsString()
     @MaxLength(50, {
         message: 'Atingiu o Máximo.',
-      })
+    })
     @MinLength(3, {
         message: 'É muito curto.',
-      })
+    })
     senha: string;
 
     @Column({

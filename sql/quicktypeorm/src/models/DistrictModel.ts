@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, JoinColumn, ManyToOne, OneToOne, Column, OneToMany } from "typeorm";
 import City from '../models/cityModel';
 import Address from '../models/addressModel';
+import { MaxLength, MinLength } from 'class-validator';
 
 @Entity('Bairro')
 
@@ -10,6 +11,12 @@ export default class District {
 
     @Column({
         length: 256,
+    })
+    @MaxLength(256, {
+        message: 'Atingiu o Máximo.',
+    })
+    @MinLength(3, {
+        message: 'É muito curto.',
     })
     nome_bairro: string;
     
