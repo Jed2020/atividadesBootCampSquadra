@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import Address from '../models/addressModel';
-import { IsEmail, IsString, Max, MaxLength, min, Min, MinLength } from 'class-validator';
+import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
 
 @Entity('Pessoa')
 

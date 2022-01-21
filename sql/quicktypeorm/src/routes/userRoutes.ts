@@ -30,16 +30,44 @@ userRouter.post('/', async (request, response) => {
 }); 
 
 userRouter.get('/', async (request, response) => {
-    response.json(await getRepository(userModel).find());
+    const repository = await getRepository(userModel).find();
+    if (repository.length === 0) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+    }
+    response.json(repository);
 });
 
 userRouter.get('/:nome', async (request, response) => {
     const repository = getCustomRepository(UserRepository);
     const res = await repository.findByName(request.params.nome);
-    if (!res) {
-        throw new Error('User not found');
-      }
+    if (res.length === 0) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+    }
     response.json(res);
 });
 
-export default userRouter;
+userRouter.put('/:Pessoa_id', async (request, response) => {
+    const repository = getRepository(userModel)
+    const res = await repository.findOne(request.params.Pessoa_id);
+    if (!res) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+    }else{
+        getRepository(userModel).merge(res, request.body);
+        const results = await getRepository(userModel).save(res);
+        return response.send(results);
+    } 
+});
+
+userRouter.delete("/:Pessoa_id", async function(request, response) {
+    const repository = getRepository(userModel)
+    const res = await repository.findOne(request.params.Pessoa_id);
+    if(!res) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+    }else{
+        res.status = 2;
+        const results = await getRepository(userModel).save(res);
+        return response.send(results);
+    }
+});
+
+export default userRouter;  

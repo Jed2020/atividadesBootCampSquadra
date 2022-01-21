@@ -28,14 +28,44 @@ districtRouter.post('/', async (request, response) => {
 }); 
 
 districtRouter.get('/', async (request, response) => {
-    response.json(await getRepository(districtModel).find());
-    return response.status(400).send({msg: "Erro nos dados."});
+    const repository = await getRepository(districtModel).find();
+    if (repository.length === 0) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+    }
+    response.json(repository);
 });
 
 districtRouter.get('/:nome_bairro', async (request, response) => {
     const repository = getCustomRepository(DistrictRepository);
     const res = await repository.findByName(request.params.nome_bairro);
+    if (res.length === 0) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+    }
     response.json(res);
-  });
+});
+
+districtRouter.put('/:Bairro_id', async (request, response) => {
+    const repository = getRepository(districtModel)
+    const res = await repository.findOne(request.params.Bairro_id);
+    if (!res) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+    }else{
+        getRepository(districtModel).merge(res, request.body);
+        const results = await getRepository(districtModel).save(res);
+        return response.send(results);
+    } 
+});
+
+districtRouter.delete("/:Bairro_id", async function(request, response) {
+    const repository = getRepository(districtModel)
+    const res = await repository.findOne(request.params.Bairro_id);
+    if(!res) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+    }else{
+        res.status = 2;
+        const results = await getRepository(districtModel).save(res);
+        return response.send(results);
+    }
+});
 
 export default districtRouter;

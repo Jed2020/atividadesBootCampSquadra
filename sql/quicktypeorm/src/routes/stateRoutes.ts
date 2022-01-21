@@ -15,6 +15,7 @@ stateRouter.post('/', async (request, response) => {
         const state = repo.create({
             sigla, nome_estado, status
         });
+
         const errors = await validate(state);
 
         if (errors.length === 0) {
@@ -29,13 +30,44 @@ stateRouter.post('/', async (request, response) => {
 }); 
 
 stateRouter.get('/', async (request, response) => {
-    response.json(await getRepository(stateModel).find());
+    const repository = await getRepository(stateModel).find();
+    if (repository.length === 0) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+    }
+    response.json(repository);
 });
 
-stateRouter.get('/:nome_bairro', async (request, response) => {
+stateRouter.get('/:nome_estado', async (request, response) => {
     const repository = getCustomRepository(StateRepository);
-    const res = await repository.findByName(request.params.nome_bairro);
+    const res = await repository.findByName(request.params.nome_estado);
+    if (res.length === 0) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+    }
     response.json(res);
   });
+
+stateRouter.put('/:UF_id', async (request, response) => {
+    const repository = getRepository(stateModel)
+    const res = await repository.findOne(request.params.UF_id);
+    if (!res) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+    }else{
+        getRepository(stateModel).merge(res, request.body);
+        const results = await getRepository(stateModel).save(res);
+        return response.send(results);
+    } 
+});
+
+stateRouter.delete("/:UF_id", async function(request, response) {
+    const repository = getRepository(stateModel)
+    const res = await repository.findOne(request.params.UF_id);
+    if(!res) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+    }else{
+        res.status = 2;
+        const results = await getRepository(stateModel).save(res);
+        return response.send(results);
+    }
+});
 
 export default stateRouter;

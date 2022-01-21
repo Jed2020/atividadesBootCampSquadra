@@ -29,13 +29,32 @@ addressRouter.post('/', async (request, response) => {
 }); 
 
 addressRouter.get('/', async (request, response) => {
-    response.json(await getRepository(addressModel).find());
+    const repository = await getRepository(addressModel).find();
+    if (repository.length === 0) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+    }
+    response.json(repository);
 });
 
-addressRouter.get('/:nome_endereco', async (request, response) => {
+addressRouter.get('/:nome_rua', async (request, response) => {
     const repository = getCustomRepository(AddressRepository);
-    const res = await repository.findByName(request.params.nome_endereco);
+    const res = await repository.findByName(request.params.nome_rua);
+    if (res.length === 0) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+    }
     response.json(res);
-  });
+});
+
+addressRouter.put('/:Endereco_id', async (request, response) => {
+    const repository = getRepository(addressModel)
+    const res = await repository.findOne(request.params.Endereco_id);
+    if (!res) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+    }else{
+        getRepository(addressModel).merge(res, request.body);
+        const results = await getRepository(addressModel).save(res);
+        return response.send(results);
+    } 
+});
 
 export default addressRouter;
