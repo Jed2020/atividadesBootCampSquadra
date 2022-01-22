@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BeforeInsert } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BeforeInsert, BeforeUpdate } from "typeorm";
 import Address from '../models/addressModel';
 import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
 
@@ -65,7 +65,10 @@ export default class User {
     @OneToMany(type => Address, endereco => endereco.Pessoa, {eager: true})
     Endereco : Address[];
 
-    @BeforeInsert()  async hashPassword() {
+    @BeforeInsert() async hashPassword() {
+        this.senha = await bcrypt.hash(this.senha, 3);  
+    } 
+    @BeforeUpdate() async hashUpPassword() {
         this.senha = await bcrypt.hash(this.senha, 3);  
     }
 }
