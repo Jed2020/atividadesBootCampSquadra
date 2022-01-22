@@ -71,14 +71,16 @@ userRouter.post('/', function (request, response) { return __awaiter(_this, void
     });
 }); });
 userRouter.get('/', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
-            case 0:
-                _b = (_a = response).json;
-                return [4 /*yield*/, typeorm_1.getRepository(userModel_1.default).find()];
+    var repository;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(userModel_1.default).find()];
             case 1:
-                _b.apply(_a, [_c.sent()]);
+                repository = _a.sent();
+                if (repository.length === 0) {
+                    return [2 /*return*/, response.status(400).send({ msg: "Não existe nenhum Nome com estes dados." })];
+                }
+                response.json(repository);
                 return [2 /*return*/];
         }
     });
@@ -92,13 +94,55 @@ userRouter.get('/:nome', function (request, response) { return __awaiter(_this, 
                 return [4 /*yield*/, repository.findByName(request.params.nome)];
             case 1:
                 res = _a.sent();
-                if (!res) {
-                    throw new Error('User not found');
+                if (res.length === 0) {
+                    return [2 /*return*/, response.status(400).send({ msg: "Não existe nenhum Nome com estes dados." })];
                 }
                 response.json(res);
                 return [2 /*return*/];
         }
     });
 }); });
+userRouter.put('/:Pessoa_id', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+    var repository, res, results;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                repository = typeorm_1.getRepository(userModel_1.default);
+                return [4 /*yield*/, repository.findOne(request.params.Pessoa_id)];
+            case 1:
+                res = _a.sent();
+                if (!!res) return [3 /*break*/, 2];
+                return [2 /*return*/, response.status(400).send({ msg: "Não existe nenhum Nome com estes dados." })];
+            case 2:
+                typeorm_1.getRepository(userModel_1.default).merge(res, request.body);
+                return [4 /*yield*/, typeorm_1.getRepository(userModel_1.default).save(res)];
+            case 3:
+                results = _a.sent();
+                return [2 /*return*/, response.send(results)];
+        }
+    });
+}); });
+userRouter.delete("/:Pessoa_id", function (request, response) {
+    return __awaiter(this, void 0, void 0, function () {
+        var repository, res, results;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    repository = typeorm_1.getRepository(userModel_1.default);
+                    return [4 /*yield*/, repository.findOne(request.params.Pessoa_id)];
+                case 1:
+                    res = _a.sent();
+                    if (!!res) return [3 /*break*/, 2];
+                    return [2 /*return*/, response.status(400).send({ msg: "Não existe nenhum Nome com estes dados." })];
+                case 2:
+                    res.status = 2;
+                    return [4 /*yield*/, typeorm_1.getRepository(userModel_1.default).save(res)];
+                case 3:
+                    results = _a.sent();
+                    return [2 /*return*/, response.send(results)];
+            }
+        });
+    });
+});
 exports.default = userRouter;
 //# sourceMappingURL=userRoutes.js.map

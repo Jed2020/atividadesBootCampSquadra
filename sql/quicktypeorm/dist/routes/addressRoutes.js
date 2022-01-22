@@ -43,15 +43,15 @@ var addressModel_1 = require("../models/addressModel");
 var addressRepository_1 = require("../repositories/addressRepository");
 var addressRouter = express_1.Router();
 addressRouter.post('/', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
-    var repo, _a, nome_rua, numero, complemento, cep, address, errors, res, err_1;
+    var repo, _a, nome_rua, numero, complemento, cep, Bairro_id, Pessoa_id, address, errors, res, err_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 4, , 5]);
                 repo = typeorm_1.getRepository(addressModel_1.default);
-                _a = request.body, nome_rua = _a.nome_rua, numero = _a.numero, complemento = _a.complemento, cep = _a.cep;
+                _a = request.body, nome_rua = _a.nome_rua, numero = _a.numero, complemento = _a.complemento, cep = _a.cep, Bairro_id = _a.Bairro_id, Pessoa_id = _a.Pessoa_id;
                 address = repo.create({
-                    nome_rua: nome_rua, numero: numero, complemento: complemento, cep: cep
+                    nome_rua: nome_rua, numero: numero, complemento: complemento, cep: cep, Bairro_id: Bairro_id, Pessoa_id: Pessoa_id
                 });
                 return [4 /*yield*/, class_validator_1.validate(address)];
             case 1:
@@ -71,29 +71,54 @@ addressRouter.post('/', function (request, response) { return __awaiter(_this, v
     });
 }); });
 addressRouter.get('/', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
-            case 0:
-                _b = (_a = response).json;
-                return [4 /*yield*/, typeorm_1.getRepository(addressModel_1.default).find()];
+    var repository;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(addressModel_1.default).find()];
             case 1:
-                _b.apply(_a, [_c.sent()]);
+                repository = _a.sent();
+                if (repository.length === 0) {
+                    return [2 /*return*/, response.status(400).send({ msg: "Não existe nenhum Nome com estes dados." })];
+                }
+                response.json(repository);
                 return [2 /*return*/];
         }
     });
 }); });
-addressRouter.get('/:nome_endereco', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+addressRouter.get('/:nome_rua', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
     var repository, res;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 repository = typeorm_1.getCustomRepository(addressRepository_1.default);
-                return [4 /*yield*/, repository.findByName(request.params.nome_endereco)];
+                return [4 /*yield*/, repository.findByName(request.params.nome_rua)];
             case 1:
                 res = _a.sent();
+                if (res.length === 0) {
+                    return [2 /*return*/, response.status(400).send({ msg: "Não existe nenhum Nome com estes dados." })];
+                }
                 response.json(res);
                 return [2 /*return*/];
+        }
+    });
+}); });
+addressRouter.put('/:Endereco_id', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+    var repository, res, results;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                repository = typeorm_1.getRepository(addressModel_1.default);
+                return [4 /*yield*/, repository.findOne(request.params.Endereco_id)];
+            case 1:
+                res = _a.sent();
+                if (!!res) return [3 /*break*/, 2];
+                return [2 /*return*/, response.status(400).send({ msg: "Não existe nenhum Nome com estes dados." })];
+            case 2:
+                typeorm_1.getRepository(addressModel_1.default).merge(res, request.body);
+                return [4 /*yield*/, typeorm_1.getRepository(addressModel_1.default).save(res)];
+            case 3:
+                results = _a.sent();
+                return [2 /*return*/, response.send(results)];
         }
     });
 }); });

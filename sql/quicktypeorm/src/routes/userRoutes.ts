@@ -5,6 +5,7 @@ import userModel from '../models/userModel';
 import UserRepository from '../repositories/userRepository';
 
 
+
 const userRouter = Router();
 
 userRouter.post('/', async (request, response) => {
@@ -28,7 +29,6 @@ userRouter.post('/', async (request, response) => {
         return response.status(400).send({msg: "Erro nos dados."});
     }
 }); 
-
 userRouter.get('/', async (request, response) => {
     const repository = await getRepository(userModel).find();
     if (repository.length === 0) {

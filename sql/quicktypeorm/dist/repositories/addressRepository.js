@@ -61,12 +61,12 @@ var StateRepository = /** @class */ (function (_super) {
     function StateRepository() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    StateRepository.prototype.findByName = function (nome_endereco) {
+    StateRepository.prototype.findByName = function (nome_rua) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, this.find({
                         where: {
-                            nome_endereco: nome_endereco,
+                            nome_rua: nome_rua,
                         },
                     })];
             });

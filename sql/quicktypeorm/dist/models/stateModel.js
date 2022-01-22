@@ -51,7 +51,7 @@ var State = /** @class */ (function () {
     ], State.prototype, "status", void 0);
     __decorate([
         typeorm_1.OneToMany(function (type) { return cityModel_1.default; }, function (municipio) { return municipio.UF; }),
-        __metadata("design:type", cityModel_1.default)
+        __metadata("design:type", Array)
     ], State.prototype, "Municipio", void 0);
     State = __decorate([
         typeorm_1.Entity('UF')

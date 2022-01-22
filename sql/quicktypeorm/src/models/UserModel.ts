@@ -1,6 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BeforeInsert } from "typeorm";
 import Address from '../models/addressModel';
 import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
+
+const bcrypt = require('bcrypt');
 
 @Entity('Pessoa')
 
@@ -44,7 +46,7 @@ export default class User {
     login: string;
 
     @Column({
-        length: 50,
+        length: 256,
     })
     @IsString()
     @MaxLength(50, {
@@ -62,4 +64,8 @@ export default class User {
 
     @OneToMany(type => Address, endereco => endereco.Pessoa, {eager: true})
     Endereco : Address[];
+
+    @BeforeInsert()  async hashPassword() {
+        this.senha = await bcrypt.hash(this.senha, 3);  
+    }
 }

@@ -49,7 +49,7 @@ var District = /** @class */ (function () {
     ], District.prototype, "Municipio", void 0);
     __decorate([
         typeorm_1.OneToMany(function (type) { return addressModel_1.default; }, function (endereco) { return endereco.Bairro; }),
-        __metadata("design:type", addressModel_1.default)
+        __metadata("design:type", Array)
     ], District.prototype, "Endereco", void 0);
     District = __decorate([
         typeorm_1.Entity('Bairro')
