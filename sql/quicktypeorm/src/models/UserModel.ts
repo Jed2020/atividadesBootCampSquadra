@@ -12,6 +12,10 @@ export default class User {
 
     @Column({
         length: 256,
+        transformer: {
+            from: (value: string) => value.toLowerCase(),
+            to: (value: string) => value.toUpperCase(),
+        },
     })
     @MaxLength(256, {
         message: 'Atingiu o Máximo.',
@@ -23,6 +27,10 @@ export default class User {
 
     @Column({
         length: 256,
+        transformer: {
+            from: (value: string) => value.toLowerCase(),
+            to: (value: string) => value.toUpperCase(),
+        },
     })
     @MaxLength(256, {
         message: 'Atingiu o Máximo.',
@@ -67,7 +75,8 @@ export default class User {
 
     @BeforeInsert() async hashPassword() {
         this.senha = await bcrypt.hash(this.senha, 3);  
-    } 
+    }         
+    
     @BeforeUpdate() async hashUpPassword() {
         this.senha = await bcrypt.hash(this.senha, 3);  
     }

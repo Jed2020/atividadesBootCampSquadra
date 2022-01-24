@@ -10,10 +10,10 @@ stateRouter.post('/', async (request, response) => {
 
     try {
         const repo = getRepository(stateModel);
-        const {sigla, nome_estado, status} = request.body;
+        const {sigla, nome, status} = request.body;
 
         const state = repo.create({
-            sigla, nome_estado, status
+            sigla, nome, status
         });
 
         const errors = await validate(state);
@@ -37,18 +37,27 @@ stateRouter.get('/', async (request, response) => {
     response.json(repository);
 });
 
-stateRouter.get('/:nome_estado', async (request, response) => {
+stateRouter.get('/:sigla', async (request, response) => {
     const repository = getCustomRepository(StateRepository);
-    const res = await repository.findByName(request.params.nome_estado);
-    if (res.length === 0) {
+    const res = await repository.findBySigla(request.params.sigla);
+    if (!res) {
         return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
     }
     response.json(res);
-  });
+});
 
-stateRouter.put('/:UF_id', async (request, response) => {
+stateRouter.get('/:CodigoUf', async (request, response) => {
+    const repository = getCustomRepository(StateRepository);
+    const res = await repository.findOne(request.params.CodigoUf);
+    if (!res) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+    }
+    response.json(res);
+});
+
+stateRouter.put('/:CodigoUf', async (request, response) => {
     const repository = getRepository(stateModel)
-    const res = await repository.findOne(request.params.UF_id);
+    const res = await repository.findOne(request.params.CodigoUf);
     if (!res) {
         return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
     }else{
@@ -58,9 +67,9 @@ stateRouter.put('/:UF_id', async (request, response) => {
     } 
 });
 
-stateRouter.delete("/:UF_id", async function(request, response) {
+stateRouter.delete("/:CodigoUf", async function(request, response) {
     const repository = getRepository(stateModel)
-    const res = await repository.findOne(request.params.UF_id);
+    const res = await repository.findOne(request.params.CodigoUf);
     if(!res) {
         return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
     }else{

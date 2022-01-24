@@ -47,9 +47,11 @@ userRouter.get('/:nome', async (request, response) => {
 });
 
 userRouter.put('/:Pessoa_id', async (request, response) => {
-    const repository = getRepository(userModel)
+    const repository = getRepository(userModel);
     const res = await repository.findOne(request.params.Pessoa_id);
+    
     if (!res) {
+        
         return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
     }else{
         getRepository(userModel).merge(res, request.body);
