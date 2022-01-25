@@ -66,6 +66,21 @@ var User = /** @class */ (function () {
             });
         });
     };
+    User.prototype.hashUpPassword = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this;
+                        return [4 /*yield*/, bcrypt.hash(this.senha, 3)];
+                    case 1:
+                        _a.senha = _b.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     __decorate([
         typeorm_1.PrimaryGeneratedColumn('uuid'),
         __metadata("design:type", String)
@@ -73,6 +88,10 @@ var User = /** @class */ (function () {
     __decorate([
         typeorm_1.Column({
             length: 256,
+            transformer: {
+                from: function (value) { return value.toLowerCase(); },
+                to: function (value) { return value.toUpperCase(); },
+            },
         }),
         class_validator_1.MaxLength(256, {
             message: 'Atingiu o Máximo.',
@@ -85,6 +104,10 @@ var User = /** @class */ (function () {
     __decorate([
         typeorm_1.Column({
             length: 256,
+            transformer: {
+                from: function (value) { return value.toLowerCase(); },
+                to: function (value) { return value.toUpperCase(); },
+            },
         }),
         class_validator_1.MaxLength(256, {
             message: 'Atingiu o Máximo.',
@@ -111,7 +134,7 @@ var User = /** @class */ (function () {
     ], User.prototype, "login", void 0);
     __decorate([
         typeorm_1.Column({
-            length: 142,
+            length: 256,
         }),
         class_validator_1.IsString(),
         class_validator_1.MaxLength(50, {
@@ -138,6 +161,12 @@ var User = /** @class */ (function () {
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], User.prototype, "hashPassword", null);
+    __decorate([
+        typeorm_1.BeforeUpdate(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], User.prototype, "hashUpPassword", null);
     User = __decorate([
         typeorm_1.Entity('Pessoa')
     ], User);

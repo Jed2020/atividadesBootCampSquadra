@@ -7,7 +7,7 @@ import { MaxLength, MinLength } from 'class-validator';
 
 export default class City {
     @PrimaryGeneratedColumn('uuid')
-    Municipio_id: string;
+    codigoMunicipio: string;
 
     @Column({
         length: 256,
@@ -18,7 +18,7 @@ export default class City {
     @MinLength(3, {
         message: 'É muito curto.',
     })
-    nome_cidade: string;
+    nome: string;
     
     @Column({
         width: 3,
@@ -26,10 +26,10 @@ export default class City {
     status: number;
 
     @Column()
-    UF_id: string;
+    codigoUF: string;
 
     @ManyToOne(type => State, uf => uf.Municipio, {eager: true})
-    @JoinColumn({name:"UF_id"})
+    @JoinColumn({name:"codigoUF"})
     UF : State;
 
     @OneToMany(type => District, bairro => bairro.Municipio)

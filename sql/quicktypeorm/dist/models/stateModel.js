@@ -18,7 +18,7 @@ var State = /** @class */ (function () {
     __decorate([
         typeorm_1.PrimaryGeneratedColumn('uuid'),
         __metadata("design:type", String)
-    ], State.prototype, "UF_id", void 0);
+    ], State.prototype, "codigoUF", void 0);
     __decorate([
         typeorm_1.Column({
             length: 3,
@@ -42,7 +42,7 @@ var State = /** @class */ (function () {
             message: 'É muito curto.',
         }),
         __metadata("design:type", String)
-    ], State.prototype, "nome_estado", void 0);
+    ], State.prototype, "nome", void 0);
     __decorate([
         typeorm_1.Column({
             width: 3,

@@ -61,12 +61,34 @@ var StateRepository = /** @class */ (function (_super) {
     function StateRepository() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    StateRepository.prototype.findByName = function (nome_cidade) {
+    StateRepository.prototype.findByName = function (nome) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, this.find({
                         where: {
-                            nome_cidade: nome_cidade,
+                            nome: nome,
+                        },
+                    })];
+            });
+        });
+    };
+    StateRepository.prototype.findByState = function (codigoUF) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.find({
+                        where: {
+                            codigoUF: codigoUF,
+                        },
+                    })];
+            });
+        });
+    };
+    StateRepository.prototype.findByCity = function (codigoMunicipio) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.find({
+                        where: {
+                            codigoMunicipio: codigoMunicipio,
                         },
                     })];
             });

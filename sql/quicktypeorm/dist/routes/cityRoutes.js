@@ -43,15 +43,15 @@ var cityModel_1 = require("../models/cityModel");
 var cityRepository_1 = require("../repositories/cityRepository");
 var cityRouter = express_1.Router();
 cityRouter.post('/', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
-    var repo, _a, nome_cidade, status, UF_id, city, errors, res, err_1;
+    var repo, _a, nome, status, codigoUF, city, errors, res, err_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 4, , 5]);
                 repo = typeorm_1.getRepository(cityModel_1.default);
-                _a = request.body, nome_cidade = _a.nome_cidade, status = _a.status, UF_id = _a.UF_id;
+                _a = request.body, nome = _a.nome, status = _a.status, codigoUF = _a.codigoUF;
                 city = repo.create({
-                    nome_cidade: nome_cidade, status: status, UF_id: UF_id
+                    nome: nome, status: status, codigoUF: codigoUF
                 });
                 return [4 /*yield*/, class_validator_1.validate(city)];
             case 1:
@@ -61,11 +61,11 @@ cityRouter.post('/', function (request, response) { return __awaiter(_this, void
             case 2:
                 res = _b.sent();
                 return [2 /*return*/, response.status(201).json(res)];
-            case 3: return [2 /*return*/, response.status(400).json(errors)];
+            case 3: return [2 /*return*/, response.status(404).json(errors)];
             case 4:
                 err_1 = _b.sent();
                 console.error('err.mensage :>>', err_1.message);
-                return [2 /*return*/, response.status(400).send({ msg: "Erro nos dados." })];
+                return [2 /*return*/, response.status(404).send({ msg: "Erro nos dados." })];
             case 5: return [2 /*return*/];
         }
     });
@@ -78,68 +78,102 @@ cityRouter.get('/', function (request, response) { return __awaiter(_this, void 
             case 1:
                 repository = _a.sent();
                 if (repository.length === 0) {
-                    return [2 /*return*/, response.status(400).send({ msg: "Não existe nenhum Nome com estes dados." })];
+                    return [2 /*return*/, response.status(404).send({ msg: "Não existe nenhum Nome com estes dados." })];
                 }
-                response.json(repository);
+                response.status(200).json(repository);
                 return [2 /*return*/];
         }
     });
 }); });
-cityRouter.get('/:nome_cidade', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+cityRouter.get('/:codigoUF', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+    var repository, res;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                repository = typeorm_1.getRepository(cityModel_1.default);
+                return [4 /*yield*/, repository.findOne(request.params.codigoUF)];
+            case 1:
+                res = _a.sent();
+                if (!res) {
+                    return [2 /*return*/, response.status(404).send({ msg: "Não existe nenhum Nome com estes dados." })];
+                }
+                response.status(200).json(res);
+                return [2 /*return*/];
+        }
+    });
+}); });
+cityRouter.get('/:codigoMunicipio', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+    var repository, res;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                repository = typeorm_1.getRepository(cityModel_1.default);
+                return [4 /*yield*/, repository.findOne(request.params.codigoMunicipio)];
+            case 1:
+                res = _a.sent();
+                if (!res) {
+                    return [2 /*return*/, response.status(404).send({ msg: "Não existe nenhum Nome com estes dados." })];
+                }
+                response.status(200).json(res);
+                return [2 /*return*/];
+        }
+    });
+}); });
+cityRouter.get('/:nome', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
     var repository, res;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 repository = typeorm_1.getCustomRepository(cityRepository_1.default);
-                return [4 /*yield*/, repository.findByName(request.params.nome_cidade)];
+                return [4 /*yield*/, repository.findByName(request.params.nome)];
             case 1:
                 res = _a.sent();
-                if (res.length === 0) {
-                    return [2 /*return*/, response.status(400).send({ msg: "Não existe nenhum Nome com estes dados." })];
+                if (!res) {
+                    return [2 /*return*/, response.status(404).send({ msg: "Não existe nenhum Nome com estes dados." })];
                 }
-                response.json(res);
+                response.status(200).json(res);
                 return [2 /*return*/];
         }
     });
 }); });
-cityRouter.put('/:Municipio_id', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+cityRouter.put('/:codigoMunicipio', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
     var repository, res, results;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 repository = typeorm_1.getRepository(cityModel_1.default);
-                return [4 /*yield*/, repository.findOne(request.params.Municipio_id)];
+                return [4 /*yield*/, repository.findOne(request.params.codigoMunicipio)];
             case 1:
                 res = _a.sent();
                 if (!!res) return [3 /*break*/, 2];
-                return [2 /*return*/, response.status(400).send({ msg: "Não existe nenhum Nome com estes dados." })];
+                return [2 /*return*/, response.status(404).send({ msg: "Não existe nenhum Nome com estes dados." })];
             case 2:
                 typeorm_1.getRepository(cityModel_1.default).merge(res, request.body);
                 return [4 /*yield*/, typeorm_1.getRepository(cityModel_1.default).save(res)];
             case 3:
                 results = _a.sent();
-                return [2 /*return*/, response.send(results)];
+                return [2 /*return*/, response.status(200).send(results)];
         }
     });
 }); });
-cityRouter.delete("/:Municipio_id", function (request, response) {
+cityRouter.delete("/:codigoMunicipio", function (request, response) {
     return __awaiter(this, void 0, void 0, function () {
         var repository, res, results;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     repository = typeorm_1.getRepository(cityModel_1.default);
-                    return [4 /*yield*/, repository.findOne(request.params.Municipio_id)];
+                    return [4 /*yield*/, repository.findOne(request.params.codigoMunicipio)];
                 case 1:
                     res = _a.sent();
                     if (!!res) return [3 /*break*/, 2];
-                    return [2 /*return*/, response.status(400).send({ msg: "Não existe nenhum Nome com estes dados." })];
+                    return [2 /*return*/, response.status(404).send({ msg: "Não existe nenhum Nome com estes dados." })];
                 case 2:
                     res.status = 2;
                     return [4 /*yield*/, typeorm_1.getRepository(cityModel_1.default).save(res)];
                 case 3:
                     results = _a.sent();
-                    return [2 /*return*/, response.send(results)];
+                    return [2 /*return*/, response.status(200).send(results)];
             }
         });
     });

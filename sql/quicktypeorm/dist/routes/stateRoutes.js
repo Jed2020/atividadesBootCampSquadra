@@ -43,15 +43,15 @@ var stateModel_1 = require("../models/stateModel");
 var stateRepository_1 = require("../repositories/stateRepository");
 var stateRouter = express_1.Router();
 stateRouter.post('/', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
-    var repo, _a, sigla, nome_estado, status, state, errors, res, err_1;
+    var repo, _a, sigla, nome, status, state, errors, res, err_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 4, , 5]);
                 repo = typeorm_1.getRepository(stateModel_1.default);
-                _a = request.body, sigla = _a.sigla, nome_estado = _a.nome_estado, status = _a.status;
+                _a = request.body, sigla = _a.sigla, nome = _a.nome, status = _a.status;
                 state = repo.create({
-                    sigla: sigla, nome_estado: nome_estado, status: status
+                    sigla: sigla, nome: nome, status: status
                 });
                 return [4 /*yield*/, class_validator_1.validate(state)];
             case 1:
@@ -80,21 +80,39 @@ stateRouter.get('/', function (request, response) { return __awaiter(_this, void
                 if (repository.length === 0) {
                     return [2 /*return*/, response.status(400).send({ msg: "Não existe nenhum Nome com estes dados." })];
                 }
-                response.json(repository);
+                response.status(200).json(repository);
                 return [2 /*return*/];
         }
     });
 }); });
-stateRouter.get('/:nome_estado', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+stateRouter.get('/:sigla', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
     var repository, res;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 repository = typeorm_1.getCustomRepository(stateRepository_1.default);
-                return [4 /*yield*/, repository.findByName(request.params.nome_estado)];
+                return [4 /*yield*/, repository.findBySigla(request.params.sigla)];
             case 1:
                 res = _a.sent();
-                if (res.length === 0) {
+                if (!res) {
+                    return [2 /*return*/, response.status(404).send({ msg: "Não existe nenhum Nome com estes dados." })];
+                }
+                response.status(200).json(res);
+                return [2 /*return*/];
+        }
+    });
+}); });
+stateRouter.get('/:codigoUF', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+    var repository, res;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                repository = typeorm_1.getRepository(stateModel_1.default);
+                return [4 /*yield*/, repository.findOne(request.params.codigoUF)];
+            case 1:
+                res = _a.sent();
+                console.log(res);
+                if (!res) {
                     return [2 /*return*/, response.status(400).send({ msg: "Não existe nenhum Nome com estes dados." })];
                 }
                 response.json(res);
@@ -102,44 +120,44 @@ stateRouter.get('/:nome_estado', function (request, response) { return __awaiter
         }
     });
 }); });
-stateRouter.put('/:UF_id', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
+stateRouter.put('/:codigoUF', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
     var repository, res, results;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 repository = typeorm_1.getRepository(stateModel_1.default);
-                return [4 /*yield*/, repository.findOne(request.params.UF_id)];
+                return [4 /*yield*/, repository.findOne(request.params.codigoUF)];
             case 1:
                 res = _a.sent();
                 if (!!res) return [3 /*break*/, 2];
-                return [2 /*return*/, response.status(400).send({ msg: "Não existe nenhum Nome com estes dados." })];
+                return [2 /*return*/, response.status(404).send({ msg: "Não existe nenhum Nome com estes dados." })];
             case 2:
                 typeorm_1.getRepository(stateModel_1.default).merge(res, request.body);
                 return [4 /*yield*/, typeorm_1.getRepository(stateModel_1.default).save(res)];
             case 3:
                 results = _a.sent();
-                return [2 /*return*/, response.send(results)];
+                return [2 /*return*/, response.status(200).send(results)];
         }
     });
 }); });
-stateRouter.delete("/:UF_id", function (request, response) {
+stateRouter.delete("/:CodigoUF", function (request, response) {
     return __awaiter(this, void 0, void 0, function () {
         var repository, res, results;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     repository = typeorm_1.getRepository(stateModel_1.default);
-                    return [4 /*yield*/, repository.findOne(request.params.UF_id)];
+                    return [4 /*yield*/, repository.findOne(request.params.CodigoUF)];
                 case 1:
                     res = _a.sent();
                     if (!!res) return [3 /*break*/, 2];
-                    return [2 /*return*/, response.status(400).send({ msg: "Não existe nenhum Nome com estes dados." })];
+                    return [2 /*return*/, response.status(404).send({ msg: "Não existe nenhum Nome com estes dados." })];
                 case 2:
                     res.status = 2;
                     return [4 /*yield*/, typeorm_1.getRepository(stateModel_1.default).save(res)];
                 case 3:
                     results = _a.sent();
-                    return [2 /*return*/, response.send(results)];
+                    return [2 /*return*/, response.status(200).send(results)];
             }
         });
     });

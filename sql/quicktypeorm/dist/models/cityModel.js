@@ -19,7 +19,7 @@ var City = /** @class */ (function () {
     __decorate([
         typeorm_1.PrimaryGeneratedColumn('uuid'),
         __metadata("design:type", String)
-    ], City.prototype, "Municipio_id", void 0);
+    ], City.prototype, "codigoMunicipio", void 0);
     __decorate([
         typeorm_1.Column({
             length: 256,
@@ -31,7 +31,7 @@ var City = /** @class */ (function () {
             message: 'É muito curto.',
         }),
         __metadata("design:type", String)
-    ], City.prototype, "nome_cidade", void 0);
+    ], City.prototype, "nome", void 0);
     __decorate([
         typeorm_1.Column({
             width: 3,
@@ -41,10 +41,10 @@ var City = /** @class */ (function () {
     __decorate([
         typeorm_1.Column(),
         __metadata("design:type", String)
-    ], City.prototype, "UF_id", void 0);
+    ], City.prototype, "codigoUF", void 0);
     __decorate([
         typeorm_1.ManyToOne(function (type) { return stateModel_1.default; }, function (uf) { return uf.Municipio; }, { eager: true }),
-        typeorm_1.JoinColumn({ name: "UF_id" }),
+        typeorm_1.JoinColumn({ name: "codigoUF" }),
         __metadata("design:type", stateModel_1.default)
     ], City.prototype, "UF", void 0);
     __decorate([

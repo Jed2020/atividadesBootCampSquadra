@@ -6,7 +6,7 @@ import { MaxLength, MinLength } from 'class-validator';
 
 export default class State {
     @PrimaryGeneratedColumn('uuid')
-    CodigoUf: string;
+    codigoUF: string;
 
     @Column({
         length: 3,

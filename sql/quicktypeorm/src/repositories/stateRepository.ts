@@ -2,21 +2,13 @@ import { EntityRepository, Repository } from 'typeorm';
 import UF from '../models/stateModel';
 
 @EntityRepository(UF)
-export default class StateRepository extends Repository<UF> {
-  public async findById(CodigoUf: string): Promise<UF[]> {
-    return this.find({
-      where: {
-        CodigoUf,
-      },
-    });
-  }
-
+export default class StateRepositoryId extends Repository<UF>{
   public async findBySigla(sigla: string): Promise<UF[]> {
-    return this.find({
+    return await this.find({
       where: {
         sigla,
       },
     });
   }
-}
 
+}

@@ -4,6 +4,7 @@ import { validate } from 'class-validator';
 import stateModel from '../models/stateModel';
 import StateRepository from '../repositories/stateRepository';
 
+
 const stateRouter = Router();
 
 stateRouter.post('/', async (request, response) => {
@@ -34,48 +35,48 @@ stateRouter.get('/', async (request, response) => {
     if (repository.length === 0) {
         return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
     }
-    response.json(repository);
+    response.status(200).json(repository);
 });
 
 stateRouter.get('/:sigla', async (request, response) => {
     const repository = getCustomRepository(StateRepository);
     const res = await repository.findBySigla(request.params.sigla);
     if (!res) {
-        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
     }
-    response.json(res);
+    response.status(200).json(res);
 });
 
-stateRouter.get('/:CodigoUf', async (request, response) => {
-    const repository = getCustomRepository(StateRepository);
-    const res = await repository.findOne(request.params.CodigoUf);
+stateRouter.get('/:codigoUF', async (request, response) => {
+    const repository = getRepository(stateModel);
+    const res = await repository.findOne(request.params.codigoUF);
     if (!res) {
-        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
     }
-    response.json(res);
+    response.status(200).json(res);
 });
 
-stateRouter.put('/:CodigoUf', async (request, response) => {
-    const repository = getRepository(stateModel)
-    const res = await repository.findOne(request.params.CodigoUf);
+stateRouter.put('/:codigoUF', async (request, response) => {
+    const repository = getRepository(stateModel);
+    const res = await repository.findOne(request.params.codigoUF);
     if (!res) {
-        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
     }else{
         getRepository(stateModel).merge(res, request.body);
         const results = await getRepository(stateModel).save(res);
-        return response.send(results);
+        return response.status(200).send(results);
     } 
 });
 
-stateRouter.delete("/:CodigoUf", async function(request, response) {
+stateRouter.delete("/:CodigoUF", async function(request, response) {
     const repository = getRepository(stateModel)
-    const res = await repository.findOne(request.params.CodigoUf);
+    const res = await repository.findOne(request.params.CodigoUF);
     if(!res) {
-        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
     }else{
         res.status = 2;
         const results = await getRepository(stateModel).save(res);
-        return response.send(results);
+        return response.status(200).send(results);
     }
 });
 
