@@ -56,7 +56,7 @@ cityRouter.get('/:codigoMunicipio', async (request, response) => {
 
 cityRouter.get('/:nome', async (request, response) => {
     const repository = getCustomRepository(CityRepository);
-    const res = await repository.findByName(request.params.nome);
+    const res = await repository.findOne(request.params.nome);
     if (!res) {
         return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
     }

@@ -10,10 +10,10 @@ districtRouter.post('/', async (request, response) => {
 
     try {
         const repo = getRepository(districtModel);
-        const {nome_bairro, status, Municipio_id} = request.body;
+        const {nome, status, codigoMunicipio} = request.body;
 
         const district = repo.create({
-            nome_bairro, status, Municipio_id
+            nome, status, codigoMunicipio
         });
         const errors = await validate(district);
 
@@ -35,18 +35,18 @@ districtRouter.get('/', async (request, response) => {
     response.json(repository);
 });
 
-districtRouter.get('/:nome_bairro', async (request, response) => {
+districtRouter.get('/:nome', async (request, response) => {
     const repository = getCustomRepository(DistrictRepository);
-    const res = await repository.findByName(request.params.nome_bairro);
+    const res = await repository.findByName(request.params.nome);
     if (res.length === 0) {
         return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
     }
     response.json(res);
 });
 
-districtRouter.put('/:Bairro_id', async (request, response) => {
+districtRouter.put('/:codigoBairro', async (request, response) => {
     const repository = getRepository(districtModel)
-    const res = await repository.findOne(request.params.Bairro_id);
+    const res = await repository.findOne(request.params.codigoBairro);
     if (!res) {
         return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
     }else{
@@ -56,9 +56,9 @@ districtRouter.put('/:Bairro_id', async (request, response) => {
     } 
 });
 
-districtRouter.delete("/:Bairro_id", async function(request, response) {
+districtRouter.delete("/:codigoBairro", async function(request, response) {
     const repository = getRepository(districtModel)
-    const res = await repository.findOne(request.params.Bairro_id);
+    const res = await repository.findOne(request.params.codigoBairro);
     if(!res) {
         return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
     }else{

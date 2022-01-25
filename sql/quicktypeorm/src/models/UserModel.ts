@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 
 export default class User {
     @PrimaryGeneratedColumn('uuid')
-    Pessoa_id: string;
+    codigoPessoa: string;
 
     @Column({
         length: 256,

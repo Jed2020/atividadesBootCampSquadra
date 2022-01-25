@@ -10,10 +10,10 @@ addressRouter.post('/', async (request, response) => {
 
     try {
         const repo = getRepository(addressModel);
-        const {nome_rua, numero, complemento, cep, Bairro_id, Pessoa_id} = request.body;
+        const {nome, numero, complemento, cep, codigoBairro, codigoPessoa} = request.body;
 
         const address = repo.create({
-            nome_rua, numero, complemento, cep, Bairro_id, Pessoa_id
+            nome, numero, complemento, cep, codigoBairro, codigoPessoa
         });
         const errors = await validate(address);
 
@@ -36,18 +36,18 @@ addressRouter.get('/', async (request, response) => {
     response.json(repository);
 });
 
-addressRouter.get('/:nome_rua', async (request, response) => {
+addressRouter.get('/:nome', async (request, response) => {
     const repository = getCustomRepository(AddressRepository);
-    const res = await repository.findByName(request.params.nome_rua);
+    const res = await repository.findByName(request.params.nome);
     if (res.length === 0) {
         return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
     }
     response.json(res);
 });
 
-addressRouter.put('/:Endereco_id', async (request, response) => {
+addressRouter.put('/:codigoEndereco', async (request, response) => {
     const repository = getRepository(addressModel)
-    const res = await repository.findOne(request.params.Endereco_id);
+    const res = await repository.findOne(request.params.codigoEndereco);
     if (!res) {
         return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
     }else{

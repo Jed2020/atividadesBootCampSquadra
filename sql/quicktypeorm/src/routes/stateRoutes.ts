@@ -40,15 +40,16 @@ stateRouter.get('/', async (request, response) => {
 
 stateRouter.get('/:sigla', async (request, response) => {
     const repository = getCustomRepository(StateRepository);
-    const res = await repository.findBySigla(request.params.sigla);
+    const res = await repository.findOne(request.params.sigla);
     if (!res) {
         return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
     }
     response.status(200).json(res);
 });
 
+
 stateRouter.get('/:codigoUF', async (request, response) => {
-    const repository = getRepository(stateModel);
+    const repository = getCustomRepository(StateRepository);
     const res = await repository.findOne(request.params.codigoUF);
     if (!res) {
         return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});

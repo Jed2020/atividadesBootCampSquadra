@@ -46,9 +46,9 @@ userRouter.get('/:nome', async (request, response) => {
     response.json(res);
 });
 
-userRouter.put('/:Pessoa_id', async (request, response) => {
+userRouter.put('/:codigoPessoa', async (request, response) => {
     const repository = getRepository(userModel);
-    const res = await repository.findOne(request.params.Pessoa_id);
+    const res = await repository.findOne(request.params.codigoPessoa);
     
     if (!res) {
         
@@ -60,9 +60,9 @@ userRouter.put('/:Pessoa_id', async (request, response) => {
     } 
 });
 
-userRouter.delete("/:Pessoa_id", async function(request, response) {
+userRouter.delete("/:codigoPessoa", async function(request, response) {
     const repository = getRepository(userModel)
-    const res = await repository.findOne(request.params.Pessoa_id);
+    const res = await repository.findOne(request.params.codigoPessoa);
     if(!res) {
         return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
     }else{

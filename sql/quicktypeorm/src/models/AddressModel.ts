@@ -6,7 +6,7 @@ import { MaxLength, MinLength } from 'class-validator';
 
 export default class Address {
     @PrimaryGeneratedColumn('uuid')
-    Endereco_id: string;
+    codigoEndereco: string;
 
     @Column({
         length: 256,
@@ -17,7 +17,7 @@ export default class Address {
     @MinLength(3, {
         message: 'É muito curto.',
     })
-    nome_rua: string;
+    nome: string;
 
     @Column({
         length: 10,
@@ -52,17 +52,17 @@ export default class Address {
     cep: string;
 
     @Column()
-    Bairro_id: string;
+    codigoBairro: string;
 
     @Column()
-    Pessoa_id: string;
+    codigoPessoa: string;
 
     @ManyToOne(type => District, bairro => bairro.Endereco, {eager: true})
-    @JoinColumn({name:"Bairro_id"})
+    @JoinColumn({name:"codigoBairro"})
     Bairro: District;
 
     @ManyToOne(type => User, pessoa => pessoa.Endereco)
-    @JoinColumn({name:"Pessoa_id"})
+    @JoinColumn({name:"codigoPessoa"})
     Pessoa: User;
 
 }
