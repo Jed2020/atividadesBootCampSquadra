@@ -28,22 +28,44 @@ districtRouter.post('/', async (request, response) => {
 }); 
 
 districtRouter.get('/', async (request, response) => {
-    const repository = await getRepository(districtModel).find();
-    if (repository.length === 0) {
-        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
-    }
-    response.json(repository);
-});
 
-districtRouter.get('/:nome', async (request, response) => {
-    const repository = getCustomRepository(DistrictRepository);
-    const res = await repository.findByName(request.params.nome);
+    const repository = new DistrictRepository;
+    
+    if (request.query.codigoMunicipio){        
+        try{
+        const res = await repository.findByIdCity(String(request.query.codigoMunicipio));
+        response.status(200).json(res);
+    }catch {
+        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+    }}
+
+    else if (request.query.codigoBairro){        
+        try{
+        const res = await repository.findById(String(request.query.codigoBairro));
+        response.status(200).json(res);
+    }catch {
+        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+    }}
+
+    else if (request.query.nome){
+        try{
+        const res = await repository.findByName(String(request.query.nome));
+        if (res.length === 0){
+            throw new Error("");
+        }
+        response.status(200).json(res);
+        }catch{
+            return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+        }  
+    }
+    else {
+        const res = await repository.findAll();
     if (res.length === 0) {
         return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
     }
-    response.json(res);
+    response.status(200).json(res);
+    };    
 });
-
 districtRouter.put('/:codigoBairro', async (request, response) => {
     const repository = getRepository(districtModel)
     const res = await repository.findOne(request.params.codigoBairro);

@@ -31,31 +31,40 @@ stateRouter.post('/', async (request, response) => {
 }); 
 
 stateRouter.get('/', async (request, response) => {
-    const repository = await getRepository(stateModel).find();
-    if (repository.length === 0) {
+
+    const repository = new StateRepository;
+    
+    if (request.query.codigoUF){        
+        try{
+        const res = await repository.findById(String(request.query.codigoUF));
+        if (!res){
+            throw new Error("");
+        }
+        response.status(200).json(res);
+    }catch {
+        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+    }}
+
+    else if (request.query.sigla){
+        try{
+        const res = await repository.findBySigla(String(request.query.sigla));
+        if (res.length === 0){
+            throw new Error("");
+        }
+        response.status(200).json(res);
+        }catch{
+            return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+        }  
+    }
+    else {
+        const res = await repository.findAll();
+    if (res.length === 0) {
         return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
     }
-    response.status(200).json(repository);
-});
-
-stateRouter.get('/:sigla', async (request, response) => {
-    const repository = getCustomRepository(StateRepository);
-    const res = await repository.findOne(request.params.sigla);
-    if (!res) {
-        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
-    }
     response.status(200).json(res);
+    };    
 });
 
-
-stateRouter.get('/:codigoUF', async (request, response) => {
-    const repository = getCustomRepository(StateRepository);
-    const res = await repository.findOne(request.params.codigoUF);
-    if (!res) {
-        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
-    }
-    response.status(200).json(res);
-});
 
 stateRouter.put('/:codigoUF', async (request, response) => {
     const repository = getRepository(stateModel);

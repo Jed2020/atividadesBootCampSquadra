@@ -29,38 +29,43 @@ cityRouter.post('/', async (request, response) => {
 }); 
 
 cityRouter.get('/', async (request, response) => {
-    const repository = await getRepository(cityModel).find();
-    if (repository.length === 0) {
-        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
-    }
-    response.status(200).json(repository);
-});
 
-cityRouter.get('/:codigoUF', async (request, response) => {
-    const repository = getRepository(cityModel);
-    const res = await repository.findOne(request.params.codigoUF);
-    if (!res) {
+    const repository = new CityRepository;
+    
+    if (request.query.codigoMunicipio){        
+        try{
+        const res = await repository.findById(String(request.query.codigoMunicipio));
+        response.status(200).json(res);
+    }catch {
         return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+    }}
+
+    else if (request.query.codigoUF){        
+        try{
+        const res = await repository.findByIdUF(String(request.query.codigoUF));
+        response.status(200).json(res);
+    }catch {
+        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+    }}
+
+    else if (request.query.nome){
+        try{
+        const res = await repository.findByName(String(request.query.nome));
+        if (res.length === 0){
+            throw new Error("");
+        }
+        response.status(200).json(res);
+        }catch{
+            return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+        }  
+    }
+    else {
+        const res = await repository.findAll();
+    if (res.length === 0) {
+        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
     }
     response.status(200).json(res);
-});
-
-cityRouter.get('/:codigoMunicipio', async (request, response) => {
-    const repository = getRepository(cityModel);
-    const res = await repository.findOne(request.params.codigoMunicipio);
-    if (!res) {
-        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
-    }
-    response.status(200).json(res);
-});
-
-cityRouter.get('/:nome', async (request, response) => {
-    const repository = getCustomRepository(CityRepository);
-    const res = await repository.findOne(request.params.nome);
-    if (!res) {
-        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
-    }
-    response.status(200).json(res);
+    };    
 });
 
 cityRouter.put('/:codigoMunicipio', async (request, response) => {

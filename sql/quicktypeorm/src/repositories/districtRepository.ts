@@ -1,13 +1,37 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 import Bairro from '../models/districtModel';
 
-@EntityRepository(Bairro)
-export default class DistrictRepository extends Repository<Bairro> {
+export default class DistrictRepository {
+  private repository: Repository<Bairro>
+
+  constructor(){
+    this.repository = getRepository(Bairro);
+  }
+  public async findById(codigoBairro: string): Promise<Bairro[]> {
+    return await this.repository.find({
+      where: {
+        codigoBairro,
+      },
+    });
+  }
+
+  public async findByIdCity(codigoMunicipio: string): Promise<Bairro[]> {
+    return await this.repository.find({
+      where: {
+        codigoMunicipio,
+      },
+    });
+  }
+
   public async findByName(nome: string): Promise<Bairro[]> {
-    return this.find({
+    return await this.repository.find({
       where: {
         nome,
       },
     });
+  }
+
+  public async findAll(): Promise<Bairro[]> {
+    return await this.repository.find();
   }
 }

@@ -10,6 +10,10 @@ export default class State {
 
     @Column({
         length: 3,
+        transformer: {
+            from: (value: string) => value.toLowerCase(),
+            to: (value: string) => value.toUpperCase(),
+        },
     })
     @MaxLength(3, {
         message: 'Atingiu o Máximo.',
