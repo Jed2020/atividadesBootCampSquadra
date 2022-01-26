@@ -23,52 +23,75 @@ userRouter.post('/', async (request, response) => {
             const res = await repo.save(user);
             return response.status(201).json(res);
         }
-        return response.status(400).json(errors);        
+        return response.status(404).json(errors);        
     } catch (err) {
         console.error('err.mensage :>>', err.message);
-        return response.status(400).send({msg: "Erro nos dados."});
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhuma Pessoa com este dados."});
     }
 }); 
-userRouter.get('/', async (request, response) => {
-    const repository = await getRepository(userModel).find();
-    if (repository.length === 0) {
-        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
-    }
-    response.json(repository);
-});
 
-userRouter.get('/:nome', async (request, response) => {
-    const repository = getCustomRepository(UserRepository);
-    const res = await repository.findByName(request.params.nome);
-    if (res.length === 0) {
-        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+userRouter.get('/', async (request, response) => {
+
+    const repository = new UserRepository;
+    
+    if (request.query.codigoPessoa){        
+        try{
+        const res = await repository.findById(String(request.query.codigoPessoa));
+        if (res.length === 0){
+            throw new Error("");
+        }
+        response.status(200).json(res);
+    }catch {
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
+    }}
+
+    else if (request.query.nome){
+        try{
+        const res = await repository.findByName(String(request.query.nome));
+        if (res.length === 0){
+            throw new Error("");
+        }
+        response.status(200).json(res);
+        }catch{
+            return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
+        }  
     }
-    response.json(res);
+    else {
+        const res = await repository.findAll();
+    if (res.length === 0) {
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
+    }
+    response.status(200).json(res);
+    };    
 });
 
 userRouter.put('/:codigoPessoa', async (request, response) => {
     const repository = getRepository(userModel);
     const res = await repository.findOne(request.params.codigoPessoa);
-    
-    if (!res) {
-        
-        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
-    }else{
+    try {
+        if (!res){
+            throw new Error("");
+        }
         getRepository(userModel).merge(res, request.body);
         const results = await getRepository(userModel).save(res);
-        return response.send(results);
-    } 
+        return response.send(results);        
+    } catch {
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhuma Pessoa com este dados."});
+    }
 });
 
 userRouter.delete("/:codigoPessoa", async function(request, response) {
     const repository = getRepository(userModel)
     const res = await repository.findOne(request.params.codigoPessoa);
-    if(!res) {
-        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
-    }else{
+    try {
+        if (!res){
+            throw new Error("");
+        }
         res.status = 2;
         const results = await getRepository(userModel).save(res);
         return response.send(results);
+    } catch {
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhuma Pessoa com este dados."});
     }
 });
 

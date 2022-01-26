@@ -24,7 +24,7 @@ addressRouter.post('/', async (request, response) => {
         return response.status(400).json(errors);
     } catch (err) {
         console.error('err.mensage :>>', err.message);
-        return response.status(400).send({msg: "Erro nos dados."});
+        return response.status(404).send({status: 404, mensagem: "Erro nos dados informados."});
     }
 }); 
 
@@ -35,25 +35,34 @@ addressRouter.get('/', async (request, response) => {
     if (request.query.codigoEndereco){        
         try{
         const res = await repository.findById(String(request.query.codigoEndereco));
+        if (res.length === 0){
+            throw new Error("");
+        }
         response.status(200).json(res);
     }catch {
-        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Endereco com este dados."});
     }}
 
     else if (request.query.codigoBairro){        
         try{
         const res = await repository.findByIdDistrict(String(request.query.codigoBairro));
+        if (res.length === 0){
+            throw new Error("");
+        }
         response.status(200).json(res);
     }catch {
-        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Endereco com este dados."});
     }}
 
     else if (request.query.codigoPessoa){        
         try{
         const res = await repository.findByIdUser(String(request.query.codigoPessoa));
+        if (res.length === 0){
+            throw new Error("");
+        }
         response.status(200).json(res);
     }catch {
-        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Endereco com este dados."});
     }}
 
     else if (request.query.nome){
@@ -64,13 +73,13 @@ addressRouter.get('/', async (request, response) => {
         }
         response.status(200).json(res);
         }catch{
-            return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+            return response.status(404).send({status: 404, mensagem: "Não existe nenhum Endereco com este dados."});
         }  
     }
     else {
         const res = await repository.findAll();
     if (res.length === 0) {
-        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Endereco com este dados."});
     }
     response.status(200).json(res);
     };    
@@ -79,13 +88,16 @@ addressRouter.get('/', async (request, response) => {
 addressRouter.put('/:codigoEndereco', async (request, response) => {
     const repository = getRepository(addressModel)
     const res = await repository.findOne(request.params.codigoEndereco);
-    if (!res) {
-        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
-    }else{
+    try {
+        if (!res){
+            throw new Error("");
+        }
         getRepository(addressModel).merge(res, request.body);
         const results = await getRepository(addressModel).save(res);
         return response.send(results);
-    } 
+    } catch {
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Endereco com este dados."});
+    }
 });
 
 export default addressRouter;

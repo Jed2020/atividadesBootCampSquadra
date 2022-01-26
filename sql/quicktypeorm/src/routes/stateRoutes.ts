@@ -23,10 +23,10 @@ stateRouter.post('/', async (request, response) => {
             const res = await repo.save(state);
             return response.status(201).json(res);
         }
-        return response.status(400).json(errors);
+        return response.status(404).json(errors);
     } catch (err) {
         console.error('err.mensage :>>', err.message);
-        return response.status(400).send({msg: "Erro nos dados."});
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhuma UF com este dados."});
     }
 }); 
 
@@ -42,7 +42,7 @@ stateRouter.get('/', async (request, response) => {
         }
         response.status(200).json(res);
     }catch {
-        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhuma UF com este dados."});
     }}
 
     else if (request.query.sigla){
@@ -53,13 +53,13 @@ stateRouter.get('/', async (request, response) => {
         }
         response.status(200).json(res);
         }catch{
-            return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+            return response.status(404).send({status: 404, mensagem: "Não existe nenhuma UF com este dados."});
         }  
     }
     else {
         const res = await repository.findAll();
     if (res.length === 0) {
-        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhuma UF com este dados."});
     }
     response.status(200).json(res);
     };    
@@ -69,24 +69,30 @@ stateRouter.get('/', async (request, response) => {
 stateRouter.put('/:codigoUF', async (request, response) => {
     const repository = getRepository(stateModel);
     const res = await repository.findOne(request.params.codigoUF);
-    if (!res) {
-        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
-    }else{
+    try {
+        if (!res){
+            throw new Error("");
+        }
         getRepository(stateModel).merge(res, request.body);
         const results = await getRepository(stateModel).save(res);
         return response.status(200).send(results);
+    } catch {
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhuma UF com este dados."});
     } 
 });
 
 stateRouter.delete("/:CodigoUF", async function(request, response) {
     const repository = getRepository(stateModel)
     const res = await repository.findOne(request.params.CodigoUF);
-    if(!res) {
-        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
-    }else{
+    try {
+        if (!res){
+            throw new Error("");
+        }
         res.status = 2;
         const results = await getRepository(stateModel).save(res);
         return response.status(200).send(results);
+    } catch {
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhuma UF com este dados."});
     }
 });
 

@@ -24,7 +24,7 @@ cityRouter.post('/', async (request, response) => {
         return response.status(404).json(errors); 
     } catch (err) {
         console.error('err.mensage :>>', err.message);
-        return response.status(404).send({msg: "Erro nos dados."});
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
     }
 }); 
 
@@ -35,17 +35,23 @@ cityRouter.get('/', async (request, response) => {
     if (request.query.codigoMunicipio){        
         try{
         const res = await repository.findById(String(request.query.codigoMunicipio));
+        if (res.length === 0){
+            throw new Error("");
+        }
         response.status(200).json(res);
     }catch {
-        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
     }}
 
     else if (request.query.codigoUF){        
         try{
         const res = await repository.findByIdUF(String(request.query.codigoUF));
+        if (res.length === 0){
+            throw new Error("");
+        }
         response.status(200).json(res);
     }catch {
-        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
     }}
 
     else if (request.query.nome){
@@ -56,13 +62,13 @@ cityRouter.get('/', async (request, response) => {
         }
         response.status(200).json(res);
         }catch{
-            return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
+            return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
         }  
     }
     else {
         const res = await repository.findAll();
     if (res.length === 0) {
-        return response.status(400).send({msg: "Não existe nenhum Nome com estes dados."});
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
     }
     response.status(200).json(res);
     };    
@@ -71,24 +77,30 @@ cityRouter.get('/', async (request, response) => {
 cityRouter.put('/:codigoMunicipio', async (request, response) => {
     const repository = getRepository(cityModel)
     const res = await repository.findOne(request.params.codigoMunicipio);
-    if (!res) {
-        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
-    }else{
+    try {
+        if (!res){
+            throw new Error("");
+        }
         getRepository(cityModel).merge(res, request.body);
         const results = await getRepository(cityModel).save(res);
         return response.status(200).send(results);
+    } catch {
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
     } 
 });
 
 cityRouter.delete("/:codigoMunicipio", async function(request, response) {
     const repository = getRepository(cityModel)
     const res = await repository.findOne(request.params.codigoMunicipio);
-    if(!res) {
-        return response.status(404).send({msg: "Não existe nenhum Nome com estes dados."});
-    }else{
+    try {
+        if (!res){
+            throw new Error("");
+        }
         res.status = 2;
         const results = await getRepository(cityModel).save(res);
         return response.status(200).send(results);
+    } catch {
+        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
     }
 });
 

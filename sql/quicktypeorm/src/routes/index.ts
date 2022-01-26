@@ -7,10 +7,10 @@ import addressRouter from './addressRoutes';
 
 const routes = Router();
 
-routes.use('/user', userRouter);
-routes.use('/state', stateRouter);
-routes.use('/city', cityRouter);
-routes.use('/district', districtRouter);
-routes.use('/address', addressRouter);
+routes.use('/pessoa', userRouter);
+routes.use('/uf', stateRouter);
+routes.use('/municipio', cityRouter);
+routes.use('/bairro', districtRouter);
+routes.use('/endereco', addressRouter);
 
 export default routes;
