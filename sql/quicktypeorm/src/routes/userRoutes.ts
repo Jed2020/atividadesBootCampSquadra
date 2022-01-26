@@ -42,7 +42,7 @@ userRouter.get('/', async (request, response) => {
         }
         response.status(200).json(res);
     }catch {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma Pessoa com este codigo."});
     }}
 
     else if (request.query.nome){
@@ -53,13 +53,13 @@ userRouter.get('/', async (request, response) => {
         }
         response.status(200).json(res);
         }catch{
-            return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma Pessoa com este nome."});
         }  
     }
     else {
         const res = await repository.findAll();
     if (res.length === 0) {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }
     response.status(200).json(res);
     };    
@@ -76,7 +76,7 @@ userRouter.put('/:codigoPessoa', async (request, response) => {
         const results = await getRepository(userModel).save(res);
         return response.send(results);        
     } catch {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhuma Pessoa com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma Pessoa com este codigo."});
     }
 });
 
@@ -91,7 +91,7 @@ userRouter.delete("/:codigoPessoa", async function(request, response) {
         const results = await getRepository(userModel).save(res);
         return response.send(results);
     } catch {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhuma Pessoa com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma Pessoa com este codigo."});
     }
 });
 

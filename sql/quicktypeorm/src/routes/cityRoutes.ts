@@ -40,7 +40,7 @@ cityRouter.get('/', async (request, response) => {
         }
         response.status(200).json(res);
     }catch {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este codigo."});
     }}
 
     else if (request.query.codigoUF){        
@@ -51,7 +51,7 @@ cityRouter.get('/', async (request, response) => {
         }
         response.status(200).json(res);
     }catch {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este codigo."});
     }}
 
     else if (request.query.nome){
@@ -62,13 +62,13 @@ cityRouter.get('/', async (request, response) => {
         }
         response.status(200).json(res);
         }catch{
-            return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este nome."});
         }  
     }
     else {
         const res = await repository.findAll();
     if (res.length === 0) {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }
     response.status(200).json(res);
     };    
@@ -85,7 +85,7 @@ cityRouter.put('/:codigoMunicipio', async (request, response) => {
         const results = await getRepository(cityModel).save(res);
         return response.status(200).send(results);
     } catch {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este codigo."});
     } 
 });
 
@@ -100,7 +100,7 @@ cityRouter.delete("/:codigoMunicipio", async function(request, response) {
         const results = await getRepository(cityModel).save(res);
         return response.status(200).send(results);
     } catch {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este codigo."});
     }
 });
 

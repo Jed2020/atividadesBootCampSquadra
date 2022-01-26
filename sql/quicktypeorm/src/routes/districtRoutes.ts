@@ -39,7 +39,7 @@ districtRouter.get('/', async (request, response) => {
         }
         response.status(200).json(res);
     }catch {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Bairro com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Bairro com este codigo."});
     }}
 
     else if (request.query.codigoBairro){        
@@ -50,7 +50,7 @@ districtRouter.get('/', async (request, response) => {
         }
         response.status(200).json(res);
     }catch {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Bairro com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Bairro com este codigo."});
     }}
 
     else if (request.query.nome){
@@ -61,13 +61,13 @@ districtRouter.get('/', async (request, response) => {
         }
         response.status(200).json(res);
         }catch{
-            return response.status(404).send({status: 404, mensagem: "Não existe nenhum Bairro com este dados."});
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Bairro com este nome."});
         }  
     }
     else {
         const res = await repository.findAll();
     if (res.length === 0) {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Bairro com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }
     response.status(200).json(res);
     };    
@@ -84,7 +84,7 @@ districtRouter.put('/:codigoBairro', async (request, response) => {
         const results = await getRepository(districtModel).save(res);
         return response.send(results);
     } catch {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Bairro com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Bairro com este codigo."});
     } 
 });
 
@@ -99,7 +99,7 @@ districtRouter.delete("/:codigoBairro", async function(request, response) {
         const results = await getRepository(districtModel).save(res);
         return response.send(results);
     } catch {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Bairro com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Bairro com este codigo."});
     }
 });
 

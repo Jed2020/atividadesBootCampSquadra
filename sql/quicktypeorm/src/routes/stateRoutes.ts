@@ -42,7 +42,7 @@ stateRouter.get('/', async (request, response) => {
         }
         response.status(200).json(res);
     }catch {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhuma UF com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma UF com este codigo."});
     }}
 
     else if (request.query.sigla){
@@ -53,13 +53,13 @@ stateRouter.get('/', async (request, response) => {
         }
         response.status(200).json(res);
         }catch{
-            return response.status(404).send({status: 404, mensagem: "Não existe nenhuma UF com este dados."});
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma UF com esta sigla."});
         }  
     }
     else {
         const res = await repository.findAll();
     if (res.length === 0) {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhuma UF com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }
     response.status(200).json(res);
     };    
@@ -77,7 +77,7 @@ stateRouter.put('/:codigoUF', async (request, response) => {
         const results = await getRepository(stateModel).save(res);
         return response.status(200).send(results);
     } catch {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhuma UF com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma UF com este codigo."});
     } 
 });
 
@@ -92,7 +92,7 @@ stateRouter.delete("/:CodigoUF", async function(request, response) {
         const results = await getRepository(stateModel).save(res);
         return response.status(200).send(results);
     } catch {
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhuma UF com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma UF com este codigo."});
     }
 });
 
