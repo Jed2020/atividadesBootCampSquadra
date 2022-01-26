@@ -10,10 +10,6 @@ export default class Address {
 
     @Column({
         length: 256,
-        transformer: {
-            from: (value: string) => value.toLowerCase(),
-            to: (value: string) => value.toUpperCase(),
-        },
     })
     @MaxLength(256, {
         message: 'Atingiu o Máximo.',
@@ -36,10 +32,6 @@ export default class Address {
 
     @Column({
         length: 20,
-        transformer: {
-            from: (value: string) => value.toLowerCase(),
-            to: (value: string) => value.toUpperCase(),
-        },
     })
     @MaxLength(20, {
         message: 'Atingiu o Máximo.',
@@ -65,7 +57,7 @@ export default class Address {
     @Column()
     codigoPessoa: string;
 
-    @ManyToOne(type => District, bairro => bairro.Endereco, {eager: true})
+    @ManyToOne(type => District, bairro => bairro.Endereco)
     @JoinColumn({name:"codigoBairro"})
     Bairro: District;
 

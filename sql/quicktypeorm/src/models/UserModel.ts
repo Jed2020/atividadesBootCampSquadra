@@ -12,10 +12,6 @@ export default class User {
 
     @Column({
         length: 256,
-        transformer: {
-            from: (value: string) => value.toLowerCase(),
-            to: (value: string) => value.toUpperCase(),
-        },
     })
     @MaxLength(256, {
         message: 'Atingiu o Máximo.',
@@ -27,10 +23,6 @@ export default class User {
 
     @Column({
         length: 256,
-        transformer: {
-            from: (value: string) => value.toLowerCase(),
-            to: (value: string) => value.toUpperCase(),
-        },
     })
     @MaxLength(256, {
         message: 'Atingiu o Máximo.',
@@ -70,7 +62,7 @@ export default class User {
     })
     status: number;
 
-    @OneToMany(type => Address, endereco => endereco.Pessoa, {eager: true})
+    @OneToMany(type => Address, endereco => endereco.Pessoa)
     Endereco : Address[];
 
     @BeforeInsert() async hashPassword() {
