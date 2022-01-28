@@ -7,8 +7,8 @@ export default class CityRepository {
   constructor(){
     this.repository = getRepository(Municipio);
   }
-  public async findById(codigoMunicipio: string): Promise<Municipio[]> {
-    return await this.repository.find({
+  public async findById(codigoMunicipio: string): Promise<Municipio> {
+    return await this.repository.findOne({
       where: {
         codigoMunicipio,
       },

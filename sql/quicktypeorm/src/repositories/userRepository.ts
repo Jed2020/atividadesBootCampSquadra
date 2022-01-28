@@ -16,6 +16,12 @@ export default class CityRepository {
     });
   }
 
+  public async findByIds(codigoPessoa: string): Promise<Pessoa | undefined> {
+    return await this.repository.findOne(codigoPessoa, {
+      relations: ['codigoEndereco', 'codigoEndereco.codigoPessoa'],
+    });
+  }
+
   public async findByIdAddress(codigoEndereco: string): Promise<Pessoa[]> {
     return await this.repository.find({
       where: {

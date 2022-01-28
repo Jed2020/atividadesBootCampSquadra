@@ -24,7 +24,7 @@ addressRouter.post('/', async (request, response) => {
         return response.status(400).json(errors);
     } catch (err) {
         console.error('err.mensage :>>', err.message);
-        return response.status(404).send({status: 404, mensagem: "Erro nos dados informados."});
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }
 }); 
 
@@ -36,67 +36,74 @@ addressRouter.get('/', async (request, response) => {
         try{
         const res = await repository.findById(String(request.query.codigoEndereco));
         if (res.length === 0){
-            throw new Error("");
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Endereco com este codigo."});
         }
         response.status(200).json(res);
-    }catch {
-        return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Endereco com este codigo."});
+    } catch (err){
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }}
 
     else if (request.query.codigoBairro){        
         try{
         const res = await repository.findByIdDistrict(String(request.query.codigoBairro));
         if (res.length === 0){
-            throw new Error("");
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Endereco com este codigo."});
         }
         response.status(200).json(res);
-    }catch {
-        return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Endereco com este codigo."});
+    } catch (err){
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }}
 
     else if (request.query.codigoPessoa){        
         try{
         const res = await repository.findByIdUser(String(request.query.codigoPessoa));
         if (res.length === 0){
-            throw new Error("");
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Endereco com este codigo."});
         }
         response.status(200).json(res);
-    }catch {
-        return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Endereco com este codigo."});
+    } catch (err){
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }}
 
     else if (request.query.nome){
         try{
         const res = await repository.findByName(String(request.query.nome));
         if (res.length === 0){
-            throw new Error("");
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Endereco com este nome."});
         }
         response.status(200).json(res);
-        }catch{
-            return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Endereco com este nome."});
-        }  
+    } catch (err){
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
+    }  
     }
     else {
-        const res = await repository.findAll();
-    if (res.length === 0) {
-        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
-    }
-    response.status(200).json(res);
+        try {
+            const res = await repository.findAll();
+            if (res.length === 0) {
+            return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
+        }
+        response.status(200).json(res);
+        } catch (err) {
+            return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."}); 
+        } 
     };    
 });
 
 addressRouter.put('/:codigoEndereco', async (request, response) => {
     const repository = getRepository(addressModel)
-    const res = await repository.findOne(request.params.codigoEndereco);
+    
     try {
+        const res = await repository.findOne(request.params.codigoEndereco);
         if (!res){
-            throw new Error("");
-        }
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Endereco com este codigo."});
+        }else {
         getRepository(addressModel).merge(res, request.body);
-        const results = await getRepository(addressModel).save(res);
-        return response.send(results);
-    } catch {
-        return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Endereco com este codigo."});
+        const results = await getRepository(addressModel).save(res);    
+        const all = await getRepository(addressModel).find();
+        return response.send(all);
+        }
+    } catch (err){
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }
 });
 

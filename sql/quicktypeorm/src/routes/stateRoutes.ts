@@ -26,7 +26,7 @@ stateRouter.post('/', async (request, response) => {
         return response.status(404).json(errors);
     } catch (err) {
         console.error('err.mensage :>>', err.message);
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhuma UF com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }
 }); 
 
@@ -38,61 +38,67 @@ stateRouter.get('/', async (request, response) => {
         try{
         const res = await repository.findById(String(request.query.codigoUF));
         if (!res){
-            throw new Error("");
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma UF com este codigo."});
         }
         response.status(200).json(res);
-    }catch {
-        return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma UF com este codigo."});
+    } catch (err){
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }}
 
     else if (request.query.sigla){
         try{
         const res = await repository.findBySigla(String(request.query.sigla));
         if (res.length === 0){
-            throw new Error("");
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma UF com esta sigla."});
         }
         response.status(200).json(res);
-        }catch{
-            return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma UF com esta sigla."});
-        }  
-    }
-    else {
-        const res = await repository.findAll();
-    if (res.length === 0) {
+    } catch (err){
         return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
-    }
-    response.status(200).json(res);
+    }}
+
+    else {
+        try {
+            const res = await repository.findAll();
+            if (res.length === 0) {
+            return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
+            }
+            response.status(200).json(res);
+        } catch (err){
+            return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
+        }
     };    
 });
 
 
 stateRouter.put('/:codigoUF', async (request, response) => {
     const repository = getRepository(stateModel);
-    const res = await repository.findOne(request.params.codigoUF);
+    
     try {
+        const res = await repository.findOne(request.params.codigoUF);
         if (!res){
-            throw new Error("");
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma UF com este codigo."});
         }
         getRepository(stateModel).merge(res, request.body);
         const results = await getRepository(stateModel).save(res);
         return response.status(200).send(results);
-    } catch {
-        return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma UF com este codigo."});
+    } catch (err){
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     } 
 });
 
 stateRouter.delete("/:CodigoUF", async function(request, response) {
     const repository = getRepository(stateModel)
-    const res = await repository.findOne(request.params.CodigoUF);
+    
     try {
+        const res = await repository.findOne(request.params.CodigoUF);
         if (!res){
-            throw new Error("");
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma UF com este codigo."});
         }
         res.status = 2;
         const results = await getRepository(stateModel).save(res);
         return response.status(200).send(results);
-    } catch {
-        return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma UF com este codigo."});
+    } catch (err){
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }
 });
 

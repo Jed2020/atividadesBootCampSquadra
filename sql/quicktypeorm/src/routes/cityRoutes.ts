@@ -24,7 +24,7 @@ cityRouter.post('/', async (request, response) => {
         return response.status(404).json(errors); 
     } catch (err) {
         console.error('err.mensage :>>', err.message);
-        return response.status(404).send({status: 404, mensagem: "Não existe nenhum Municipio com este dados."});
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }
 }); 
 
@@ -35,72 +35,81 @@ cityRouter.get('/', async (request, response) => {
     if (request.query.codigoMunicipio){        
         try{
         const res = await repository.findById(String(request.query.codigoMunicipio));
-        if (res.length === 0){
-            throw new Error("");
+        if (!res){
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este codigo."});
         }
         response.status(200).json(res);
-    }catch {
-        return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este codigo."});
+    } catch (err){
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }}
 
     else if (request.query.codigoUF){        
         try{
         const res = await repository.findByIdUF(String(request.query.codigoUF));
         if (res.length === 0){
-            throw new Error("");
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este codigo."});
         }
         response.status(200).json(res);
-    }catch {
-        return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este codigo."});
+    } catch (err){
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }}
 
     else if (request.query.nome){
         try{
         const res = await repository.findByName(String(request.query.nome));
         if (res.length === 0){
-            throw new Error("");
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este nome."});
         }
         response.status(200).json(res);
-        }catch{
-            return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este nome."});
-        }  
-    }
-    else {
-        const res = await repository.findAll();
-    if (res.length === 0) {
+    } catch (err){
         return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
-    }
-    response.status(200).json(res);
-    };    
+    }}
+
+    else {
+        try {
+            const res = await repository.findAll();
+            if (res.length === 0) {
+                return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
+            }
+            response.status(200).json(res);
+   
+        } catch (err){
+            return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
+        }
+    }        
 });
 
 cityRouter.put('/:codigoMunicipio', async (request, response) => {
     const repository = getRepository(cityModel)
-    const res = await repository.findOne(request.params.codigoMunicipio);
+    
     try {
+        const res = await repository.findOne(request.params.codigoMunicipio);
         if (!res){
-            throw new Error("");
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este codigo."});
         }
         getRepository(cityModel).merge(res, request.body);
         const results = await getRepository(cityModel).save(res);
-        return response.status(200).send(results);
-    } catch {
-        return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este codigo."});
+        const all = await getRepository(cityModel).find();
+        return response.send(all);
+    } catch (err){
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     } 
 });
 
 cityRouter.delete("/:codigoMunicipio", async function(request, response) {
     const repository = getRepository(cityModel)
-    const res = await repository.findOne(request.params.codigoMunicipio);
+    
     try {
+        const res = await repository.findOne(request.params.codigoMunicipio);
         if (!res){
-            throw new Error("");
+            return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este codigo."});
         }
         res.status = 2;
         const results = await getRepository(cityModel).save(res);
-        return response.status(200).send(results);
-    } catch {
-        return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este codigo."});
+        const all = await getRepository(cityModel).find();
+        return response.send(all);
+    } catch (err){
+        return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }
 });
 
