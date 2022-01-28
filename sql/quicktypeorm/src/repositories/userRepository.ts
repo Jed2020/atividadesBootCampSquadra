@@ -8,18 +8,13 @@ export default class CityRepository {
     this.repository = getRepository(Pessoa);
   }
 
-  public async findById(codigoPessoa: string): Promise<Pessoa[]> {
-    return await this.repository.find({
+  public async findById(codigoPessoa: string): Promise<Pessoa> {
+    return await this.repository.findOne({
       where: {
         codigoPessoa,
       },
-    });
-  }
-
-  public async findByIds(codigoPessoa: string): Promise<Pessoa | undefined> {
-    return await this.repository.findOne(codigoPessoa, {
-      relations: ['codigoEndereco', 'codigoEndereco.codigoPessoa'],
-    });
+      relations: ['Endereco', 'Endereco.Bairro', 'Endereco.Bairro.Municipio', 'Endereco.Bairro.Municipio.UF'],
+    })
   }
 
   public async findByIdAddress(codigoEndereco: string): Promise<Pessoa[]> {

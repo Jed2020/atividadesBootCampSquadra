@@ -43,7 +43,7 @@ userRouter.get('/', async (request, response) => {
     
     if (request.query.codigoPessoa){        
         try{
-        const res = await repository.findByIds(String(request.query.codigoPessoa));
+        const res = await repository.findById(String(request.query.codigoPessoa));
         if (!res){
             return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma Pessoa com este codigo."});
         }
