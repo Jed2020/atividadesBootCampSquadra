@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { getRepository, getCustomRepository } from 'typeorm';
 import { validate } from 'class-validator';
 import stateModel from '../models/stateModel';
+import cityModel from '../models/cityModel';
 import StateRepository from '../repositories/stateRepository';
 
 
@@ -12,13 +13,18 @@ stateRouter.post('/', async (request, response) => {
     try {
         const repo = getRepository(stateModel);
         const {sigla, nome, status} = request.body;
-
+        const nameSigla = await repo.findOne({
+            where: { sigla: request.body.sigla}
+        });
+        if (nameSigla){
+            return response.status(404).send({status: 404, mensagem: "Existe uma UF com essa sigla no banco de dados."});
+        }
         const state = repo.create({
             sigla, nome, status
         });
 
         const errors = await validate(state);
-
+        
         if (errors.length === 0) {
             const res = await repo.save(state);
             return response.status(201).json(res);
@@ -80,23 +86,34 @@ stateRouter.put('/:codigoUF', async (request, response) => {
         }
         getRepository(stateModel).merge(res, request.body);
         const results = await getRepository(stateModel).save(res);
-        return response.status(200).send(results);
+        const all = await getRepository(stateModel).find();
+        return response.send(all);
     } catch (err){
         return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     } 
 });
 
-stateRouter.delete("/:CodigoUF", async function(request, response) {
-    const repository = getRepository(stateModel)
+stateRouter.delete("/:codigoUF", async function(request, response) {
+    const repository = getRepository(stateModel);
+    const repo = getRepository(cityModel);
     
     try {
-        const res = await repository.findOne(request.params.CodigoUF);
+        const res = await repository.findOne(request.params.codigoUF);
+        const idCity = await repo.findOne({
+            where: { codigoUF: request.params.codigoUF}
+        });
+          
         if (!res){
             return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma UF com este codigo."});
+        } else if (idCity) {
+            return response.status(404).send({status: 404, mensagem: "A UF tem relacionamento com algum Municipio."});
+        } else {
+            res.status = 2;
+            const results = await getRepository(stateModel).save(res);
+            const all = await getRepository(stateModel).find();
+            return response.send(all);
         }
-        res.status = 2;
-        const results = await getRepository(stateModel).save(res);
-        return response.status(200).send(results);
+        
     } catch (err){
         return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }
