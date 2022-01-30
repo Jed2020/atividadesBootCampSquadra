@@ -3,10 +3,6 @@ import { getRepository, getCustomRepository } from 'typeorm';
 import { validate } from 'class-validator';
 import userModel from '../models/userModel';
 import UserRepository from '../repositories/userRepository';
-import AddressRepository from '../repositories/addressRepository';
-import DistrictRepository from '../repositories/districtRepository';
-import CityRepository from '../repositories/cityRepository';
-import StateRepository from '../repositories/stateRepository';
 
 
 const userRouter = Router();
@@ -16,6 +12,12 @@ userRouter.post('/', async (request, response) => {
     try {
         const repo = getRepository(userModel);
         const {nome, sobrenome, idade, login, senha, status} = request.body;
+        const nameLogin = await repo.findOne({
+            where: { login: request.body.login}
+        });
+        if (nameLogin){
+            return response.status(404).send({status: 404, mensagem: "Existe um cadastro com esse login banco de dados."});
+        }
 
         const user = repo.create({
             nome, sobrenome, idade, login, senha, status
@@ -36,10 +38,6 @@ userRouter.post('/', async (request, response) => {
 userRouter.get('/', async (request, response) => {
 
     const repository = new UserRepository;
-    const addressrepo = new AddressRepository;
-    const districtrepo = new DistrictRepository;
-    const cityrepo = new CityRepository;
-    const staterepo = new StateRepository;
     
     if (request.query.codigoPessoa){        
         try{

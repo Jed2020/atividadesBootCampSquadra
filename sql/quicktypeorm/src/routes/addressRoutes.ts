@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getRepository, getCustomRepository } from 'typeorm';
-import { validate } from 'class-validator';
+import { validate, ValidationError } from 'class-validator';
 import addressModel from '../models/addressModel';
 import AddressRepository from '../repositories/addressRepository';
 
@@ -11,19 +11,25 @@ addressRouter.post('/', async (request, response) => {
     try {
         const repo = getRepository(addressModel);
         const {nome, numero, complemento, cep, codigoBairro, codigoPessoa} = request.body;
-
+        
         const address = repo.create({
             nome, numero, complemento, cep, codigoBairro, codigoPessoa
         });
-        const errors = await validate(address);
+        const errors: ValidationError[] = await validate(address, {
+            skipMissingProperties: true,             
+          });
 
         if (errors.length === 0) {
             const res = await repo.save(address);
             return response.status(201).json(res);
         }
-        return response.status(400).json(errors);
+        return response.status(400).json({
+            status: 404,
+            mensagem: `Erro de cadastro : ${errors
+              .map((error) => error.toString())
+              .join(', ')}`,
+          });
     } catch (err) {
-        console.error('err.mensage :>>', err.message);
         return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }
 }); 

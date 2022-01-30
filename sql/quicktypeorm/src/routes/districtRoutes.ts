@@ -19,7 +19,7 @@ districtRouter.post('/', async (request, response) => {
             where: { codigoMunicipio: request.body.codigoMunicipio}
         });
         if (nameDistrict && idCity) {
-            return response.status(404).send({status: 404, mensagem: "Existe um Bairro nsse Municipio no banco de dados."});
+            return response.status(404).send({status: 404, mensagem: "Existe um Bairro com o mesmo nome nesse Municipio no banco de dados."});
         }
 
         const district = repo.create({

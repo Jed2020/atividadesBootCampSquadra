@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, JoinColumn, Column, OneToMany } from "typeorm";
 import City from '../models/cityModel';
-import { MaxLength, MinLength } from 'class-validator';
+import { MaxLength, MinLength, IsNotEmpty } from 'class-validator';
 
 @Entity('UF')
 
@@ -17,6 +17,9 @@ export default class State {
     @MinLength(2, {
         message: 'É muito curto.',
     })
+    @IsNotEmpty({
+        message: 'Campo precisa ser preenchido.',
+    })
     sigla: string;
 
     @Column({
@@ -28,10 +31,16 @@ export default class State {
     @MinLength(3, {
         message: 'É muito curto.',
     })
+    @IsNotEmpty({
+        message: 'Campo precisa ser preenchido.',
+    })
     nome: string;
     
     @Column({
         width: 3,
+    })
+    @IsNotEmpty({
+        message: 'Campo precisa ser preenchido.',
     })
     status: number;
 

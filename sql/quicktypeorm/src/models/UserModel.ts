@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BeforeInsert, BeforeUpdate } from "typeorm";
 import Address from '../models/addressModel';
-import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsEmail, IsString, MaxLength, MinLength, IsNotEmpty } from 'class-validator';
 
 const bcrypt = require('bcrypt');
 
@@ -19,6 +19,9 @@ export default class User {
     @MinLength(3, {
         message: 'É muito curto.',
     })
+    @IsNotEmpty({
+        message: 'Campo precisa ser preenchido.',
+    })
     nome: string;
 
     @Column({
@@ -30,10 +33,16 @@ export default class User {
     @MinLength(3, {
         message: 'É muito curto.',
     })
+    @IsNotEmpty({
+        message: 'Campo precisa ser preenchido.',
+    })
     sobrenome: string;
 
     @Column({
         width: 3,
+    })
+    @IsNotEmpty({
+        message: 'Campo precisa ser preenchido.',
     })
     idade: number;
 
@@ -42,6 +51,9 @@ export default class User {
     })
     @IsEmail({
         message: 'Email inválido.',
+    })
+    @IsNotEmpty({
+        message: 'Campo precisa ser preenchido.',
     })
     login: string;
 
@@ -55,10 +67,16 @@ export default class User {
     @MinLength(3, {
         message: 'É muito curto.',
     })
+    @IsNotEmpty({
+        message: 'Campo precisa ser preenchido.',
+    })
     senha: string;
 
     @Column({
         width: 9,
+    })
+    @IsNotEmpty({
+        message: 'Campo precisa ser preenchido.',
     })
     status: number;
 

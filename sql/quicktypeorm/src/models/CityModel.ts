@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from "typeorm";
 import State from '../models/stateModel';
 import District from '../models/districtModel';
-import { MaxLength, MinLength } from 'class-validator';
+import { MaxLength, MinLength, IsNotEmpty } from 'class-validator';
 
 @Entity('Municipio')
 
@@ -18,14 +18,21 @@ export default class City {
     @MinLength(3, {
         message: 'É muito curto.',
     })
+    @IsNotEmpty({
+        message: 'Campo precisa ser preenchido.',
+    })
     nome: string;
     
     @Column({
         width: 3,
     })
+    
     status: number;
 
     @Column()
+    @IsNotEmpty({
+        message: 'Campo precisa ser preenchido.',
+    })
     codigoUF: string;
 
     @ManyToOne(type => State, uf => uf.Municipio)

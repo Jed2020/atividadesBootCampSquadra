@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from "typeorm";
 import District from '../models/districtModel';
 import User from '../models/userModel';
-import { MaxLength, MinLength } from 'class-validator';
+import { MaxLength, MinLength, IsNotEmpty } from 'class-validator';
 @Entity('Endereco')
 
 export default class Address {
@@ -17,6 +17,9 @@ export default class Address {
     @MinLength(3, {
         message: 'É muito curto.',
     })
+    @IsNotEmpty({
+        message: 'Campo precisa ser preenchido.',
+    })
     nome: string;
 
     @Column({
@@ -27,6 +30,9 @@ export default class Address {
     })
     @MinLength(0, {
         message: 'É muito curto.',
+    })
+    @IsNotEmpty({
+        message: 'Campo precisa ser preenchido.',
     })
     numero: string;
 
@@ -49,12 +55,21 @@ export default class Address {
     @MinLength(0, {
         message: 'É muito curto.',
     })
+    @IsNotEmpty({
+        message: 'Campo precisa ser preenchido.',
+    })
     cep: string;
 
     @Column()
+    @IsNotEmpty({
+        message: 'Campo precisa ser preenchido.',
+    })
     codigoBairro: string;
 
     @Column()
+    @IsNotEmpty({
+        message: 'Campo precisa ser preenchido.',
+    })
     codigoPessoa: string;
 
     @ManyToOne(type => District, bairro => bairro.Endereco)
