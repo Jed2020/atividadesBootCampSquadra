@@ -29,7 +29,8 @@ districtRouter.post('/', async (request, response) => {
 
         if (errors.length === 0) {
             const res = await repo.save(district);
-            return response.status(201).json(res);
+            const all = await getRepository(districtModel).find();
+            return response.status(201).send(all);
         }
         return response.status(404).json(errors);
     } catch (err) {
@@ -45,7 +46,7 @@ districtRouter.get('/', async (request, response) => {
     if (request.query.codigoMunicipio){        
         try{
         const res = await repository.findByIdCity(String(request.query.codigoMunicipio));
-        if (res.length === 0){
+        if (!res){
             return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Bairro com este codigo."});
         }
         response.status(200).json(res);
@@ -67,7 +68,7 @@ districtRouter.get('/', async (request, response) => {
     else if (request.query.nome){
         try{
         const res = await repository.findByName(String(request.query.nome));
-        if (res.length === 0){
+        if (!res){
             return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Bairro com este nome."});
         }
         response.status(200).json(res);
@@ -87,11 +88,11 @@ districtRouter.get('/', async (request, response) => {
     };    
 });
 
-districtRouter.put('/:codigoBairro', async (request, response) => {
+districtRouter.put('/', async (request, response) => {
     const repository = getRepository(districtModel)
     
     try {
-        const res = await repository.findOne(request.params.codigoBairro);
+        const res = await repository.findOne(request.body.codigoBairro);
         if (!res){
             return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Bairro com este codigo."});
         }

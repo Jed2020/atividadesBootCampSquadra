@@ -20,7 +20,7 @@ export default class Address {
     @IsNotEmpty({
         message: 'Campo precisa ser preenchido.',
     })
-    nome: string;
+    nomeRua: string;
 
     @Column({
         length: 10,

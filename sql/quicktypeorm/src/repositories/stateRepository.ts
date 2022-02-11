@@ -7,16 +7,16 @@ export default class StateRepository {
   constructor(){
     this.repository = getRepository(UF);
   }
-  public async findById(codigoUF: string): Promise<UF[]> {
-    return await this.repository.find({
+  public async findById(codigoUF: string): Promise<UF> {
+    return await this.repository.findOne({
       where: {
         codigoUF,
       },
     });
   }
 
-  public async findBySigla(sigla: string): Promise<UF[]> {
-    return await this.repository.find({
+  public async findBySigla(sigla: string): Promise<UF> {
+    return await this.repository.findOne({
       where: {
         sigla,
       },

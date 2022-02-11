@@ -15,16 +15,16 @@ export default class DistrictRepository {
     });
   }
 
-  public async findByIdCity(codigoMunicipio: string): Promise<Bairro[]> {
-    return await this.repository.find({
+  public async findByIdCity(codigoMunicipio: string): Promise<Bairro> {
+    return await this.repository.findOne({
       where: {
         codigoMunicipio,
       },
     });
   }
 
-  public async findByName(nome: string): Promise<Bairro[]> {
-    return await this.repository.find({
+  public async findByName(nome: string): Promise<Bairro> {
+    return await this.repository.findOne({
       where: {
         nome,
       },

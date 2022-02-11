@@ -17,16 +17,16 @@ export default class CityRepository {
     })
   }
 
-  public async findByIdAddress(codigoEndereco: string): Promise<Pessoa[]> {
-    return await this.repository.find({
+  public async findByIdAddress(codigoEndereco: string): Promise<Pessoa> {
+    return await this.repository.findOne({
       where: {
         codigoEndereco,
       },
     });
   }
 
-  public async findByName(nome: string): Promise<Pessoa[]> {
-    return await this.repository.find({
+  public async findByName(nome: string): Promise<Pessoa> {
+    return await this.repository.findOne({
       where: {
         nome,
       },

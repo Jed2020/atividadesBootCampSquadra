@@ -15,8 +15,8 @@ export default class CityRepository {
     });
   }
 
-  public async findByName(nome: string): Promise<Municipio[]> {
-    return await this.repository.find({
+  public async findByName(nome: string): Promise<Municipio> {
+    return await this.repository.findOne({
       where: {
         nome,
       },

@@ -27,7 +27,8 @@ stateRouter.post('/', async (request, response) => {
         
         if (errors.length === 0) {
             const res = await repo.save(state);
-            return response.status(201).json(res);
+            const all = await getRepository(stateModel).find();
+            return response.status(201).send(all);
         }
         return response.status(404).json(errors);
     } catch (err) {
@@ -54,7 +55,7 @@ stateRouter.get('/', async (request, response) => {
     else if (request.query.sigla){
         try{
         const res = await repository.findBySigla(String(request.query.sigla));
-        if (res.length === 0){
+        if (!res){
             return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma UF com esta sigla."});
         }
         response.status(200).json(res);
@@ -76,11 +77,11 @@ stateRouter.get('/', async (request, response) => {
 });
 
 
-stateRouter.put('/:codigoUF', async (request, response) => {
+stateRouter.put('/', async (request, response) => {
     const repository = getRepository(stateModel);
     
     try {
-        const res = await repository.findOne(request.params.codigoUF);
+        const res = await repository.findOne(request.body.codigoUF);
         if (!res){
             return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma UF com este codigo."});
         }

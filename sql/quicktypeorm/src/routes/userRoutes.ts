@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import { getRepository, getCustomRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { validate } from 'class-validator';
 import userModel from '../models/userModel';
+import addressModel from '../models/addressModel';
 import UserRepository from '../repositories/userRepository';
 
 
@@ -11,22 +12,35 @@ userRouter.post('/', async (request, response) => {
 
     try {
         const repo = getRepository(userModel);
-        const {nome, sobrenome, idade, login, senha, status} = request.body;
+        const repoAdrres = getRepository(addressModel);
+        const {nome, sobrenome, idade, login, senha, status, Endereco
+        } = request.body;
+        
         const nameLogin = await repo.findOne({
             where: { login: request.body.login}
         });
         if (nameLogin){
             return response.status(404).send({status: 404, mensagem: "Existe um cadastro com esse login banco de dados."});
         }
-
+        
         const user = repo.create({
             nome, sobrenome, idade, login, senha, status
         });
+
         const errors = await validate(user);
 
         if (errors.length === 0) {
-            const res = await repo.save(user);
-            return response.status(201).json(res);
+            await repo.save(user);
+            
+            Endereco.forEach(item =>  { 
+                repoAdrres.save({
+                    nomeRua: item.nomeRua, numero: item.numero, complemento: item.complemento, 
+                    cep: item.cep, codigoBairro: item.codigoBairro, codigoPessoa: user.codigoPessoa
+                 });
+            });
+            
+            const all = await getRepository(userModel).find();
+            return response.status(201).send(all);
         }
         return response.status(404).json(errors);        
     } catch (err) {
@@ -53,7 +67,7 @@ userRouter.get('/', async (request, response) => {
     else if (request.query.nome){
         try{
         const res = await repository.findByName(String(request.query.nome));
-        if (res.length === 0){
+        if (!res){
             return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma Pessoa com este nome."});
         }
         response.status(200).json(res);
@@ -74,19 +88,65 @@ userRouter.get('/', async (request, response) => {
     };    
 });
 
-userRouter.put('/:codigoPessoa', async (request, response) => {
-    const repository = getRepository(userModel);
-    
+userRouter.put('/', async (request, response) => {
+        
     try {
-        const res = await repository.findOne(request.params.codigoPessoa);
-        if (!res){
+        const repository = getRepository(userModel);
+        const repoAdrres = getRepository(addressModel);
+        const {codigoPessoa, Endereco} = request.body;
+        const userExist = await repository.findOne(codigoPessoa);      
+        
+        if (!userExist){
             return response.status(404).send({status: 404, mensagem: "Nao existe nenhuma Pessoa com este codigo."});
+        } else {
+
+            let postman = request.body;
+
+            userExist.nome = postman.nome;
+            userExist.sobrenome = postman.sobrenome;
+            userExist.idade = postman.idade;
+            userExist.login = postman.login;
+            userExist.senha = postman.senha;
+            userExist.status = postman.status;
+
+            repository.save(userExist);
+
+            let encontrados = await repoAdrres.find({where: {codigoPessoa}});
+
+            for (const item of encontrados) {
+
+                let exists = Endereco.filter(x => x.codigoEndereco == item.codigoEndereco);
+        
+                if (exists.length <= 0) {
+                    repoAdrres.delete(item.codigoEndereco);
+                }
+
+            }
+
+            for (const item of Endereco) {
+                if (item.codigoEndereco != null) {
+
+                    let exists = encontrados.filter(x => x.codigoEndereco == item.codigoEndereco);
+
+                    if (exists.length > 0) {
+                        repoAdrres.merge(exists[0], item);
+                        await repoAdrres.save(exists);
+                    }
+
+                } else {
+                    repoAdrres.save({
+                        nomeRua: item.nomeRua, numero: item.numero, complemento: item.complemento, 
+                        cep: item.cep, codigoBairro: item.codigoBairro, codigoPessoa: item.codigoPessoa
+                    });
+                }
+            }
         }
-        getRepository(userModel).merge(res, request.body);
-        await getRepository(userModel).save(res);
+        
         const all = await getRepository(userModel).find();
-        return response.send(all);        
+        return response.status(200).send(all);
+
     } catch (err){
+        console.error('err.mensage :>>', err.message);
         return response.status(404).send({status: 404, mensagem: "Nao foi possivel conectar com o banco de dados."});
     }
 });

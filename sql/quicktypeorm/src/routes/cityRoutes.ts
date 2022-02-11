@@ -29,7 +29,9 @@ cityRouter.post('/', async (request, response) => {
 
         if (errors.length === 0) {
             const res = await repo.save(city);
-            return response.status(201).json(res);
+            const all = await getRepository(cityModel).find();
+            return response.status(201).send(all);
+            
         }
         return response.status(404).json(errors); 
     } catch (err) {
@@ -56,7 +58,7 @@ cityRouter.get('/', async (request, response) => {
     else if (request.query.codigoUF){        
         try{
         const res = await repository.findByIdUF(String(request.query.codigoUF));
-        if (res.length === 0){
+        if (!res){
             return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este codigo."});
         }
         response.status(200).json(res);
@@ -67,7 +69,7 @@ cityRouter.get('/', async (request, response) => {
     else if (request.query.nome){
         try{
         const res = await repository.findByName(String(request.query.nome));
-        if (res.length === 0){
+        if (!res){
             return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este nome."});
         }
         response.status(200).json(res);
@@ -89,11 +91,11 @@ cityRouter.get('/', async (request, response) => {
     }        
 });
 
-cityRouter.put('/:codigoMunicipio', async (request, response) => {
+cityRouter.put('/', async (request, response) => {
     const repository = getRepository(cityModel)
     
     try {
-        const res = await repository.findOne(request.params.codigoMunicipio);
+        const res = await repository.findOne(request.body.codigoMunicipio);
         if (!res){
             return response.status(404).send({status: 404, mensagem: "Nao existe nenhum Municipio com este codigo."});
         }
